@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <title>Keyi Chen | Portfolio</title>
+    <meta content="Interactive Portfolio of Keyi Chen - Machine Learning, Computer Vision, and Generative Art." name="description">
+    
+    <!-- Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           CORE LAYOUT & NIGHT MODE (DEFAULT)
+           ========================================= */
+        body {
+            margin: 0;
+            background-color: #020617; /* Slate 950 */
+            color: #e2e8f0;
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+            cursor: none !important; /* HIDE DEFAULT CURSOR */
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        
+        /* FORCE HIDE CURSOR ON EVERYTHING */
+        a, button, .project-link, .card-fan, .internship-banner, * {
+            cursor: none !important;
+        }
+
+        .font-serif-display {
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        #custom-cursor {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 99999; /* Extremely high z-index */
+            transform: translate(-50%, -50%);
+            /* REMOVED transform from transition to eliminate movement lag */
+            transition: width 0.2s cubic-bezier(0.25, 1, 0.5, 1), 
+                        height 0.2s cubic-bezier(0.25, 1, 0.5, 1), 
+                        background-color 0.2s, 
+                        border-radius 0.2s, 
+                        border-color 0.2s,
+                        clip-path 0.2s;
+            mix-blend-mode: difference; 
+            will-change: transform, width, height;
+        }
+
+        /* NIGHT MODE CURSOR (Glowing Orb) */
+        body:not(.day-mode) #custom-cursor {
+            width: 12px;
+            height: 12px;
+            background-color: #F2C94C;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #F2C94C;
+        }
+        /* NIGHT HOVER STATE - Small Star with Strong Halo */
+        body:not(.day-mode) #custom-cursor.hovering {
+            width: 24px; 
+            height: 24px;
+            background-color: #F2C94C;
+            border-radius: 0; 
+            /* 4-Point Star Shape */
+            clip-path: polygon(50% 0%, 61% 35%, 100% 50%, 61% 65%, 50% 100%, 39% 65%, 0% 50%, 39% 35%);
+            /* Stronger Halo using Drop-Shadow */
+            filter: drop-shadow(0 0 5px #F2C94C) drop-shadow(0 0 15px #F2C94C);
+            transform: translate(-50%, -50%) rotate(180deg); 
+            mix-blend-mode: normal;
+        }
+
+        /* --- Glassmorphism (Night) --- */
+        .glass-card {
+            background: rgba(10, 15, 30, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(242, 201, 76, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(242, 201, 76, 0.3);
+            background: rgba(15, 23, 42, 0.85);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        /* --- Typography --- */
+        .section-title {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-bottom: 1.5rem; padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .project-link {
+            position: relative; color: #ffffff; text-decoration: none; font-weight: 600;
+            transition: color 0.3s; display: inline-flex; align-items: center; gap: 0.25rem;
+        }
+        .project-link::after {
+            content: ''; position: absolute; bottom: -2px; left: 0; width: 0%; height: 1px;
+            background-color: #F2C94C; transition: width 0.3s ease;
+        }
+        .project-link:hover, .group:hover .project-link { 
+            color: #F2C94C; text-shadow: 0 0 12px rgba(242, 201, 76, 0.5); 
+        }
+        .group:hover .project-link::after { width: 100%; }
+
+        /* --- Buttons (Night) --- */
+        .starry-btn {
+            padding: 14px 48px;
+            border: 1px solid rgba(242, 201, 76, 0.3);
+            border-radius: 99px;
+            color: #F2C94C;
+            background: rgba(242, 201, 76, 0.05);
+            font-size: 1.1rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1); 
+            display: flex; align-items: center; gap: 12px;
+            position: relative; 
+            z-index: 10; 
+        }
+        .starry-btn:hover {
+            background: #F2C94C; color: #020617;
+            box-shadow: 0 0 35px rgba(242, 201, 76, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* --- Intro Overlay (Night) --- */
+        #intro-overlay {
+            position: fixed; inset: 0; z-index: 100;
+            background-color: rgba(2, 6, 23, 0.5); 
+            backdrop-filter: blur(2px);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.4s ease, visibility 0.4s;
+            overflow: hidden; 
+        }
+        
+        /* Warp Out Animation */
+        @keyframes warp-zoom {
+            0% { transform: scale(1); opacity: 1; filter: blur(0px); }
+            40% { opacity: 0.8; }
+            100% { transform: scale(15); opacity: 0; filter: blur(10px); }
+        }
+        .warp-out-active {
+            animation: warp-zoom 0.6s cubic-bezier(0.7, 0, 0.84, 0) forwards; 
+            transform-origin: center center;
+        }
+
+        /* Flash Overlay for Warp Effect */
+        #warp-flash {
+            position: fixed; inset: 0; z-index: 200;
+            background-color: white;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.5s ease-out;
+        }
+        #warp-flash.active {
+            opacity: 1;
+            transition: opacity 0.05s ease-in; 
+        }
+
+        /* --- Night Animations --- */
+        @keyframes breathe-name {
+            0%, 100% { opacity: 1; text-shadow: 0 0 40px rgba(242,201,76,0.6); }
+            50% { opacity: 0.6; text-shadow: 0 0 5px rgba(242,201,76,0.1); }
+        }
+        @keyframes breathe-subtle { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+        @keyframes breathe-btn {
+            0%, 100% { border-color: rgba(242, 201, 76, 0.9); color: rgba(242, 201, 76, 1); background: rgba(242, 201, 76, 0.08); }
+            50% { border-color: rgba(242, 201, 76, 0.3); color: rgba(242, 201, 76, 0.6); background: rgba(242, 201, 76, 0.02); }
+        }
+        .animate-name { animation: breathe-name 2.5s ease-in-out infinite; }
+        .animate-subtitle { animation: breathe-subtle 2.5s ease-in-out infinite; }
+        .animate-btn-twinkle { animation: breathe-btn 2.5s ease-in-out infinite; }
+
+        /* --- PLAYING CARD FAN STYLE --- */
+        .card-fan {
+            position: relative;
+            width: 40px; 
+            height: 56px;
+            display: inline-block;
+            vertical-align: middle;
+            cursor: none; 
+            z-index: 10;
+        }
+        .p-card {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #fff;
+            border-radius: 4px;
+            border: 1px solid #999;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: 50% 100%; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+        }
+        
+        /* STACK THICKNESS EFFECT */
+        .c2 { transform: rotate(3deg) translate(2px, 1px); }
+        .c3 { transform: rotate(5deg) translate(3px, 2px); }
+        .c4 { transform: rotate(7deg) translate(4px, 3px); }
+        .c5 { transform: rotate(9deg) translate(5px, 4px); }
+
+        /* Card Colors - Default (Night Mode) */
+        /* REQ: Night Mode = Black (Joker), Red, Black, Red, Black */
+        .c1 { color: #1a1a1a; z-index: 5; } 
+        .c2 { color: #e63946; z-index: 4; } 
+        .c3 { color: #1a1a1a; z-index: 3; } 
+        .c4 { color: #e63946; z-index: 2; } 
+        .c5 { color: #1a1a1a; z-index: 1; } 
+
+        /* WIDER Fan Animation on Hover */
+        .card-fan:hover .c1 { transform: rotate(-60deg) translateX(-25px) translateY(5px); }
+        .card-fan:hover .c2 { transform: rotate(-30deg) translateX(-12px) translateY(-10px); }
+        .card-fan:hover .c3 { transform: rotate(0deg) translateY(-15px); }
+        .card-fan:hover .c4 { transform: rotate(30deg) translateX(12px) translateY(-10px); }
+        .card-fan:hover .c5 { transform: rotate(60deg) translateX(25px) translateY(5px); }
+
+
+        /* =========================================
+           DAY MODE OVERRIDES (CLEAN + PIXEL INTRO)
+           ========================================= */
+        body.day-mode {
+            background-color: #f8fafc; /* Slate 50 */
+            color: #1e293b; /* Slate 800 */
+            cursor: none;
+        }
+
+        /* DAY MODE CURSOR STYLE (Pixel Block) */
+        body.day-mode #custom-cursor {
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* Almost opaque white */
+            border: 3px solid #000000; /* Thick black box */
+            border-radius: 0; /* Square */
+            box-shadow: 3px 3px 0px rgba(230, 57, 70, 0.5); /* Retro Red Shadow */
+            mix-blend-mode: normal; 
+        }
+        /* Day Hover State: Solid YELLOW */
+        body.day-mode #custom-cursor.hovering {
+            background-color: #F2C94C; /* Solid Yellow */
+            transform: translate(-50%, -50%) scale(1.4) rotate(45deg); 
+            border-color: #000;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.4);
+            mix-blend-mode: normal;
+        }
+
+        /* Day Mode Text Overrides */
+        body.day-mode .text-white { color: #0f172a !important; text-shadow: none; } 
+        body.day-mode .text-slate-300 { color: #475569 !important; } 
+        body.day-mode .text-slate-400 { color: #64748b !important; }
+        body.day-mode .text-slate-500 { color: #94a3b8 !important; }
+        body.day-mode .text-\[\#F2C94C\] { color: #e63946 !important; background: transparent; padding: 0; } 
+        
+        /* 1. SPECIAL FONT FOR HEADERS & PROJECTS IN DAY MODE */
+        body.day-mode h1, body.day-mode h2, body.day-mode h3, 
+        body.day-mode .font-serif-display, body.day-mode .section-title,
+        body.day-mode .project-link,
+        body.day-mode .group h3 { 
+            font-family: 'Press Start 2P', cursive; 
+            letter-spacing: -1px;
+            line-height: 1.5;
+        }
+        
+        body.day-mode .text-6xl { font-size: 32px !important; } 
+        body.day-mode .text-8xl { font-size: 40px !important; }
+        body.day-mode .text-2xl { font-size: 20px !important; }
+        
+        /* Body: Mono Font */
+        body.day-mode p, body.day-mode li, body.day-mode nav, body.day-mode span,
+        body.day-mode .internship-banner {
+             font-family: 'Space Mono', monospace; 
+             font-size: 14px; 
+        }
+
+        /* RESET ICON FONT */
+        body.day-mode .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined' !important;
+            font-weight: normal;
+            font-style: normal;
+            letter-spacing: normal;
+            text-transform: none;
+        }
+        
+        /* === CRITICAL DAY MODE BOX STYLING === */
+        body.day-mode .glass-card {
+            background: #ffffff !important;
+            border: 4px solid #000000 !important; 
+            border-radius: 0px !important; 
+            box-shadow: 8px 8px 0px #000000 !important; 
+            backdrop-filter: none !important;
+            transform: none; 
+        }
+        body.day-mode .rounded-3xl, body.day-mode .rounded-full {
+            border-radius: 0px !important;
+        }
+        
+        body.day-mode .glass-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 12px 12px 0px #F2C94C !important; 
+            border-color: #000000 !important;
+        }
+        
+        /* Day Mode Link Hover */
+        body.day-mode .project-link { 
+            color: #1e293b; 
+            border-bottom: none; 
+        }
+        
+        body.day-mode .group:hover .project-link,
+        body.day-mode .group:hover h3 { 
+            color: #e63946 !important; 
+            text-shadow: none; 
+        }
+        
+        body.day-mode .project-link:hover { 
+            border-bottom: 2px solid #e63946; 
+        }
+
+        /* Day Mode Intro Overlay */
+        body.day-mode #intro-overlay {
+            background-color: transparent;
+            backdrop-filter: none;
+        }
+
+        /* --- DAY MODE SPECIFIC INTRO STYLES --- */
+        body.day-mode .animate-name {
+            animation: none;
+            text-shadow: 4px 4px 0px #000;
+            background-color: #F2C94C;
+            color: #000000 !important;
+            padding: 10px 20px;
+            display: inline-block;
+            transform: rotate(-2deg); 
+            font-size: 24px !important;
+            font-family: 'Press Start 2P', cursive; 
+        }
+        @media (min-width: 768px) {
+             body.day-mode .animate-name { font-size: 48px !important; }
+        }
+
+        body.day-mode .starry-btn {
+            animation: none;
+            background: #ffffff;
+            color: #000000;
+            border: 4px solid #000000;
+            border-radius: 0px !important;
+            box-shadow: 6px 6px 0px #000000;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            font-family: 'Press Start 2P', cursive;
+        }
+        
+        /* UPDATED: DAY MODE BUTTON HOVER - Yellow Shadow Only, Black Border */
+        body.day-mode .starry-btn:hover {
+            background: #ffffff; /* Keep background white */
+            color: #000000;
+            transform: translate(-2px, -2px);
+            border-color: #000000; /* KEEP BORDER BLACK */
+            box-shadow: 8px 8px 0px #F2C94C; /* YELLOW Shadow */
+        }
+        body.day-mode .starry-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px #000;
+        }
+        
+        /* MATCH INTERNSHIP NOTE SIZE */
+        body.day-mode .internship-banner {
+            background-color: #ffffff;
+            border: 1px solid #000000; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.1); 
+            opacity: 1;
+            z-index: 20;
+            padding-left: 1.5rem; padding-right: 1.5rem; 
+            padding-top: 0.5rem; padding-bottom: 0.5rem;
+            border-radius: 0px !important; 
+        }
+        body.day-mode .internship-banner:hover {
+             background-color: #fff;
+             box-shadow: 6px 6px 0px #F2C94C;
+        }
+        
+        body.day-mode .p-card {
+            border: 3px solid #000;
+            border-radius: 0;
+            box-shadow: 3px 3px 0 #000;
+            background-color: #fff;
+        }
+        /* ALTERNATING COLORS FOR DAY MODE */
+        body.day-mode .c1 { color: #e63946; } 
+        body.day-mode .c2 { color: #1a1a1a; } 
+        body.day-mode .c3 { color: #e63946; } 
+        body.day-mode .c4 { color: #1a1a1a; } 
+        body.day-mode .c5 { color: #e63946; } 
+
+        /* Fix Text Size for Joker in Day Mode */
+        body.day-mode .p-card span {
+            font-size: 5px; 
+            font-family: 'Press Start 2P', cursive;
+            letter-spacing: 1px; 
+        }
+        
+        /* THEME TOGGLE FIX */
+        body.day-mode .js-theme-toggle {
+            font-family: 'Press Start 2P', cursive;
+            background: #ffffff;
+            color: #000000;
+            border: 4px solid #000000;
+            border-radius: 0px !important;
+            box-shadow: 4px 4px 0px #000000;
+            width: 40px !important;
+            height: 40px !important;
+            padding: 0 !important; 
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }
+        body.day-mode .js-theme-toggle:hover {
+            background: #000000;
+            color: #ffffff;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0px #F2C94C;
+        }
+        
+        body.day-mode .animate-subtitle {
+            animation: none;
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+            color: #000;
+            background-color: rgba(255,255,255,0.8); 
+            padding: 5px;
+        }
+        
+        /* --- Canvas Layers --- */
+        canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
+        #bgCanvas { z-index: 0; }
+        #fgCanvas { z-index: 1; pointer-events: none; } 
+
+        /* --- Content Layer Animations --- */
+        #content-layer { position: relative; z-index: 10; display: none; min-height: 100vh; }
+        .fade-in-active { display: block !important; opacity: 1 !important; }
+        .fade-in-active header { animation: fadeIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        .fade-in-active main, .fade-in-active footer { animation: fadeInUp 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { transform: translateY(0); opacity: 1; } }
+
+        .fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        
+        body.day-mode ::-webkit-scrollbar-track { background: #f1f5f9; }
+        body.day-mode ::-webkit-scrollbar-thumb { background: #cbd5e1; }
+    </style>
+</head>
+<body class="day-mode"> <!-- DEFAULT: Light Mode -->
+
+    <!-- CUSTOM CURSOR -->
+    <div id="custom-cursor"></div>
+
+    <!-- Flash Overlay for Warp -->
+    <div id="warp-flash"></div>
+
+    <!-- VISUALS -->
+    <canvas id="bgCanvas"></canvas>
+    <canvas id="fgCanvas"></canvas>
+
+    <!-- INTRO -->
+    <div id="intro-overlay">
+        <button class="js-theme-toggle absolute top-6 right-6 z-[102] p-3 rounded-full glass-card text-[#F2C94C] hover:scale-110 transition-transform cursor-pointer border border-[#F2C94C]/20 flex items-center justify-center" title="Toggle Day/Night Mode">
+            <span class="material-symbols-outlined text-xl">light_mode</span>
+        </button>
+        
+        <div id="intro-content" class="text-center px-4 relative z-20"> 
+            <!-- 4. SMALLER NAME (One Line) -->
+            <h1 id="scramble-text" class="text-3xl md:text-5xl text-[#F2C94C] font-serif-display mb-8 tracking-wider animate-name whitespace-nowrap">Keyi Chen</h1>
+            <p class="text-slate-400 text-xs md:text-sm tracking-[0.4em] mb-16 font-light uppercase leading-relaxed animate-subtitle">Machine Learning • Computer Vision • Generative Art</p>
+            <!-- Added 'magnetic-btn' class for js logic -->
+            <button class="starry-btn mx-auto group animate-btn-twinkle magnetic-btn" id="startBtn">
+                <span class="material-symbols-outlined group-hover:animate-spin">radio_button_unchecked</span>
+                Enter Portfolio
+            </button>
+        </div>
+        <div class="absolute bottom-10 text-slate-600 text-[10px] tracking-widest uppercase">Interactive Experience</div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="pb-32" id="content-layer">
+        <header class="glass-card !rounded-none border-b border-slate-800/60 sticky top-0 z-50 backdrop-blur-xl">
+            <div class="max-w-5xl mx-auto px-6 md:px-12 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-left">
+                    <h1 class="text-2xl text-[#F2C94C] font-serif-display tracking-wide">Keyi Chen</h1>
+                    <p class="text-xs text-slate-400 tracking-widest mt-1">M.S. ECE @ CMU</p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <nav class="flex gap-6 text-sm text-slate-300">
+                        <a id="emailBtn" class="hover:text-[#F2C94C] transition-colors flex items-center gap-2 cursor-pointer" title="Copy Email to Clipboard">
+                            <span class="material-symbols-outlined text-lg">mail</span> <span id="emailText">Email</span>
+                        </a>
+                        <a class="hover:text-[#F2C94C] transition-colors flex items-center gap-2" href="https://github.com/kec020" target="_blank">
+                            <span class="material-symbols-outlined text-lg">code</span> GitHub
+                        </a>
+                        <a class="hover:text-[#F2C94C] transition-colors flex items-center gap-2" href="https://www.linkedin.com/in/keyichen1756/" target="_blank">
+                            <span class="material-symbols-outlined text-lg">person</span> LinkedIn
+                        </a>
+                    </nav>
+                    <button class="js-theme-toggle p-2 rounded-full glass-card text-[#F2C94C] hover:scale-110 transition-transform cursor-pointer border border-[#F2C94C]/20 flex items-center justify-center h-10 w-10" title="Toggle Day/Night Mode">
+                        <span class="material-symbols-outlined text-xl">light_mode</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-5xl mx-auto px-6 md:px-12 py-12 space-y-16">
+            
+            <!-- About Me Section -->
+            <section class="glass-card p-8 md:p-10 rounded-3xl">
+                <div class="section-title"><span class="material-symbols-outlined text-[#F2C94C] text-3xl">person</span><h2 class="text-2xl font-serif-display text-white">About Me</h2></div>
+                <div class="flex flex-col md:flex-row gap-8 items-start">
+                    <!-- Left Column: Photo + Card Fan -->
+                    <div class="w-full md:w-1/3 flex flex-col items-center gap-6">
+                        <!-- Photo -->
+                        <div class="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-[#F2C94C]/20 bg-slate-800 flex items-center justify-center shadow-lg">
+                            <span class="material-symbols-outlined text-6xl text-slate-600">image</span>
+                        </div>
+
+                        <!-- Card Fan on LEFT (ANCHORED) -->
+                        <div class="card-fan mt-2">
+                            <div class="p-card c1 flex flex-col items-center justify-center">
+                                <!-- Jester SVG -->
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L4 9L7 16L12 12L17 16L20 9L12 2Z" />
+                                    <circle cx="4" cy="9" r="1.5" />
+                                    <circle cx="20" cy="9" r="1.5" />
+                                    <circle cx="12" cy="2" r="1.5" />
+                                    <path d="M9 16C9 17.66 10.34 19 12 19C13.66 19 15 17.66 15 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span class="text-[8px] font-bold mt-1 tracking-widest">JOKER</span>
+                            </div>
+                            <!-- UPDATED ORDER & SUITS for alternating colors -->
+                            <div class="p-card c2">♠</div> <!-- Black -->
+                            <div class="p-card c3">♥</div> <!-- Red -->
+                            <div class="p-card c4">♣</div> <!-- Black -->
+                            <div class="p-card c5">♦</div> <!-- Red -->
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Bio + Interest Text + Internship Banner -->
+                    <div class="w-full md:w-2/3 text-slate-300 leading-relaxed space-y-4 flex flex-col h-full">
+                        <p>
+                            Hi there! I'm <strong>Keyi Chen</strong>, a passionate graduate student at Carnegie Mellon University specializing in Electrical and Computer Engineering.
+                        </p>
+                        <p>
+                            My academic and professional journey is driven by a deep fascination with <strong>Machine Learning</strong> and <strong>Computer Vision</strong>. I love exploring how algorithms can interpret the visual world and create generative art that bridges technology and creativity.
+                        </p>
+                        <p>
+                            When I'm not coding or training models, you can find me exploring new tech trends, participating in hackathons, or brainstorming my next project.
+                        </p>
+
+                        <!-- Interest Text MOVED HERE -->
+                        <p class="text-xs text-slate-400 leading-relaxed border-l-2 border-[#F2C94C] pl-4 italic">
+                            I also enjoy collecting <strong class="text-white">playing cards</strong>. Currently, I'm practicing cardistry to perform fancy cuts and shuffles!
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Internship Banner: DIRECT CHILD OF SECTION for Full Width -->
+                <div class="pt-8 w-full">
+                    <div class="internship-banner flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-[#F2C94C]/30 bg-[#F2C94C]/5 text-[#F2C94C] text-lg tracking-wide font-medium shadow-[0_0_15px_rgba(242,201,76,0.1)] hover:bg-[#F2C94C]/10 transition-colors cursor-default w-full text-center">
+                        <span class="material-symbols-outlined text-2xl">campaign</span>
+                        Actively seeking internship in Summer 2026
+                    </div>
+                </div>
+            </section>
+
+            <!-- Education -->
+            <section class="glass-card p-8 md:p-10 rounded-3xl">
+                <div class="section-title"><span class="material-symbols-outlined text-[#F2C94C] text-3xl">school</span><h2 class="text-2xl font-serif-display text-white">Education</h2></div>
+                <div class="space-y-10">
+                    <div class="relative pl-6 border-l-2 border-[#F2C94C]">
+                        <div class="absolute -left-[9px] top-0 w-4 h-4 bg-[#F2C94C] rounded-full shadow-[0_0_10px_#F2C94C]"></div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2"><h3 class="text-xl font-bold text-white">Carnegie Mellon University</h3><span class="text-[#F2C94C] text-xs font-mono bg-[#F2C94C]/10 px-3 py-1 rounded-full mt-1 md:mt-0 w-fit">Jan 2026 - May 2027</span></div>
+                        <p class="text-slate-300 italic">M.S. in Electrical and Computer Engineering</p>
+                    </div>
+                    <div class="relative pl-6 border-l-2 border-slate-700">
+                        <div class="absolute -left-[9px] top-0 w-4 h-4 bg-slate-700 rounded-full"></div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2"><h3 class="text-xl font-bold text-white">University of California San Diego</h3><span class="text-slate-400 text-xs font-mono mt-1 md:mt-0">Aug 2021 - Dec 2025</span></div>
+                        <div class="space-y-1 mb-4 text-slate-300 text-sm leading-relaxed"><p>B.S. in Mathematics and Computer Science | <span class="text-[#F2C94C] font-semibold">Major GPA: 3.94/4.0</span></p><p>B.S. in Cognitive Science (ML &amp; Neural Computation) | <span class="text-[#F2C94C] font-semibold">Major GPA: 3.94/4.0</span></p><p class="text-slate-300 pt-1"><span class="text-[#F2C94C] font-bold">Honors:</span> Graduate with Honors with High Distinction</p></div>
+                        <div class="flex flex-wrap gap-2"><span class="px-3 py-1 bg-slate-800/50 border border-slate-700 rounded-full text-xs text-slate-400">Deep Learning</span><span class="px-3 py-1 bg-slate-800/50 border border-slate-700 rounded-full text-xs text-slate-400">Computer Graphics</span><span class="px-3 py-1 bg-slate-800/50 border border-slate-700 rounded-full text-xs text-slate-400">Optimization</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card p-8 md:p-10 rounded-3xl">
+                <div class="section-title"><span class="material-symbols-outlined text-[#F2C94C] text-3xl">work_history</span><h2 class="text-2xl font-serif-display text-white">Experience</h2></div>
+                <div class="space-y-12">
+                    <div class="group">
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2"><h3 class="text-xl font-bold text-white group-hover:text-[#F2C94C] transition-colors">Amazon</h3><span class="text-sm font-mono text-slate-500">July 2024 - Nov 2024</span></div>
+                        <p class="text-lg text-[#F2C94C]/90 mb-4 font-medium">Applied Scientist Intern</p>
+                        <ul class="space-y-3 text-slate-300 text-sm leading-relaxed list-disc list-outside pl-5 marker:text-[#F2C94C]"><li>Designed automated pipelines to compare new models against DGL benchmarks, improving evaluation efficiency.</li><li>Streamlined large-scale model testing by leveraging <strong class="text-white">AWS Array Jobs</strong> with dynamic parameter assignment.</li><li>Optimized workflows by integrating runtime/accuracy tracking to eliminate redundant runs.</li></ul>
+                    </div>
+                    <div class="group">
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2"><h3 class="text-xl font-bold text-white group-hover:text-[#F2C94C] transition-colors">Interactive Video Content Exploration</h3><span class="text-sm font-mono text-slate-500">July 2023 - Sep 2023</span></div>
+                        <p class="text-lg text-[#F2C94C]/90 mb-4 font-medium">Research Assistant <span class="text-slate-500 text-sm font-normal">(Published in CHI '24)</span></p>
+                        <ul class="space-y-3 text-slate-300 text-sm leading-relaxed list-disc list-outside pl-5 marker:text-[#F2C94C]"><li>Built ML pipeline generating captions for video scenes; engineered <strong class="text-white">GPT-4</strong> prompts to rectify suboptimal captions.</li><li>Achieved <strong class="text-white">93.9%</strong> object detection accuracy and enhanced recall by 20%.</li><li>Co-authored research paper accepted by <strong class="text-white">CHI '24</strong>.</li></ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card p-8 md:p-10 rounded-3xl">
+                <div class="section-title"><span class="material-symbols-outlined text-[#F2C94C] text-3xl">rocket_launch</span><h2 class="text-2xl font-serif-display text-white">Selected Projects</h2></div>
+                <div class="grid gap-10">
+                    <div class="group relative pl-5 border-l border-slate-700 hover:border-[#F2C94C] transition-colors duration-300">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-2"><h3 class="text-lg font-bold text-white group-hover:text-[#F2C94C] transition-colors cursor-default">Diffusion Models with Learned Anisotropic Covariance</h3><span class="text-xs font-mono text-slate-500 mt-1 md:mt-0 whitespace-nowrap">Jan 2025 - June 2025</span></div>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-3">Developed a 2D diffusion model with learned anisotropic covariance matrices in the reverse denoising process to address numerical instability in DDPM. Analyzed sampling strategies and visualized vector fields.</p>
+                    </div>
+                    <div class="group relative pl-5 border-l border-slate-700 hover:border-[#F2C94C] transition-colors duration-300">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-2"><a class="project-link text-lg" href="https://github.com/ucsd-cse110-sp23/cse-110-project-team-5" target="_blank">Image Inpainting <span class="material-symbols-outlined text-sm">open_in_new</span></a><span class="text-xs font-mono text-slate-500 mt-1 md:mt-0 whitespace-nowrap">March 2024</span></div>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-3">Engineered a robust encoder-decoder deep learning model with skip connections for 128x128 inpainting. Enhanced realism by integrating Adversarial Loss with L2 loss.</p>
+                    </div>
+                    <div class="group relative pl-5 border-l border-slate-700 hover:border-[#F2C94C] transition-colors duration-300">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-2"><h3 class="text-lg font-bold text-white group-hover:text-[#F2C94C] transition-colors cursor-default">Image Classification Architectures</h3><span class="text-xs font-mono text-slate-500 mt-1 md:mt-0 whitespace-nowrap">March 2024</span></div>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-3">Implemented ResNet-10, DenseNet, and Vision Transformers using PyTorch. Achieved &gt;80% accuracy on CIFAR-10 through fine-tuning, data augmentation, and optimizer experiments.</p>
+                    </div>
+                    <div class="group relative pl-5 border-l border-slate-700 hover:border-[#F2C94C] transition-colors duration-300">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-2"><a class="project-link text-lg" href="https://github.com/FishInAZ/Beer-Prediction" target="_blank">Beer Recommendation System <span class="material-symbols-outlined text-sm">open_in_new</span></a><span class="text-xs font-mono text-slate-500 mt-1 md:mt-0 whitespace-nowrap">Nov 2023</span></div>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-3">Implemented FPMC, PRME, MF, and Markov Chains to predict next purchase from sparse data. Achieved 79% accuracy (AUC). Performed extensive EDA on seasonal trends.</p>
+                    </div>
+                    <div class="group relative pl-5 border-l border-slate-700 hover:border-[#F2C94C] transition-colors duration-300">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-2"><a class="project-link text-lg" href="https://github.com/ucsd-cse110-sp23/cse-110-project-team-5" target="_blank">SayIt Assistant <span class="material-symbols-outlined text-sm">open_in_new</span></a><span class="text-xs font-mono text-slate-500 mt-1 md:mt-0 whitespace-nowrap">March 2023 - June 2023</span></div>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-3">Developed a voice-activated assistant using ChatGPT/Whisper API. Implemented agile processes with JUnit and GitHub Actions. Built a Java Swing UI backed by MongoDB.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card p-8 md:p-10 rounded-3xl">
+                <div class="section-title"><span class="material-symbols-outlined text-[#F2C94C] text-3xl">code</span><h2 class="text-2xl font-serif-display text-white">Technical Skills</h2></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div><h4 class="text-xs font-bold text-[#F2C94C] uppercase mb-3 tracking-wider">Languages</h4><ul class="text-sm text-slate-300 space-y-2"><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Python</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Java</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>C/C++</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>SQL</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>R</li></ul></div>
+                    <div><h4 class="text-xs font-bold text-[#F2C94C] uppercase mb-3 tracking-wider">Libraries</h4><ul class="text-sm text-slate-300 space-y-2"><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>PyTorch</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>TensorFlow</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Pandas</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Scikit-learn</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Keras</li></ul></div>
+                    <div><h4 class="text-xs font-bold text-[#F2C94C] uppercase mb-3 tracking-wider">Web &amp; Viz</h4><ul class="text-sm text-slate-300 space-y-2"><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>HTML/CSS</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>OpenGL</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>OpenCV</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Matplotlib</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Seaborn</li></ul></div>
+                    <div><h4 class="text-xs font-bold text-[#F2C94C] uppercase mb-3 tracking-wider">Tools</h4><ul class="text-sm text-slate-300 space-y-2"><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Git</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Docker</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>LaTeX</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>JUnit</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>MATLAB</li></ul></div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center py-12 text-slate-600 text-xs relative z-20 flex flex-col items-center gap-4"><p>© 2025 Keyi Chen. Designed with Physics &amp; WebGL.</p></footer>
+    </div>
+
+    <!-- LOGIC SCRIPTS -->
+    <script>
+        // --- AUDIO & UTILS ---
+        class AudioEngine {
+            constructor() { this.ctx = null; this.master = null; this.notes = [196.00, 261.63, 293.66, 329.63, 392.00, 523.25]; }
+            async init() {
+                const AC = window.AudioContext || window.webkitAudioContext; this.ctx = new AC();
+                if (this.ctx.state === 'suspended') await this.ctx.resume();
+                this.master = this.ctx.createGain(); this.master.gain.value = 0.3; this.master.connect(this.ctx.destination);
+            }
+            playChime() {
+                if (!this.ctx) return;
+                const t = this.ctx.currentTime; const osc = this.ctx.createOscillator();
+                const freq = this.notes[Math.floor(Math.random() * this.notes.length)];
+                osc.frequency.value = freq; osc.type = 'sine';
+                const gain = this.ctx.createGain();
+                gain.gain.setValueAtTime(0, t); gain.gain.linearRampToValueAtTime(0.1, t + 0.05); gain.gain.exponentialRampToValueAtTime(0.001, t + 3.0);
+                const pan = this.ctx.createStereoPanner(); pan.pan.value = Math.random() * 1.6 - 0.8;
+                osc.connect(gain).connect(pan).connect(this.master); osc.start(t); osc.stop(t + 3.1);
+            }
+        }
+
+        const Simplex = (function() {
+            const p=new Uint8Array(256); for(let i=0;i<256;i++) p[i]=Math.floor(Math.random()*256);
+            const perm=new Uint8Array(512), permMod12=new Uint8Array(512);
+            for(let i=0;i<512;i++){ perm[i]=p[i&255]; permMod12[i]=perm[i]%12; }
+            const grad3=new Float32Array([1,1,0,-1,1,0,1,-1,0,-1,-1,0,1,0,1,-1,0,1,1,0,-1,-1,0,-1,0,1,1,0,-1,1,0,1,-1,0,-1,-1]);
+            const F3=1.0/3.0, G3=1.0/6.0;
+            return {
+                noise2D: function(x,y) { return this.noise3D(x,y,0); },
+                noise3D: function(xin,yin,zin) {
+                    let n0,n1,n2,n3; const s=(xin+yin+zin)*F3; const i=Math.floor(xin+s), j=Math.floor(yin+s), k=Math.floor(zin+s);
+                    const t=(i+j+k)*G3; const X0=i-t, Y0=j-t, Z0=k-t; const x0=xin-X0, y0=yin-Y0, z0=zin-Z0;
+                    let i1,j1,k1,i2,j2,k2;
+                    if(x0>=y0){if(y0>=z0){i1=1;j1=0;k1=0;i2=1;j2=1;k2=0;}else if(x0>=z0){i1=1;j1=0;k1=0;i2=1;j2=0;k2=1;}else{i1=0;j1=0;k1=1;i2=1;j2=0;k2=1;}}
+                    else{if(y0<z0){i1=0;j1=0;k1=1;i2=0;j2=1;k2=1;}else if(x0<z0){i1=0;j1=1;k1=0;i2=0;j2=1;k2=1;}else{i1=0;j1=1;k1=0;i2=1;j2=1;k2=0;}}
+                    const x1=x0-i1+G3, y1=y0-j1+G3, z1=z0-k1+G3; const x2=x0-i2+2.0*G3, y2=y0-j2+2.0*G3, z2=z0-k2+2.0*G3; const x3=x0-1.0+3.0*G3, y3=y0-1.0+3.0*G3, z3=z0-1.0+3.0*G3;
+                    const ii=i&255, jj=j&255, kk=k&255;
+                    function dot(idx,x,y,z){ const g=permMod12[idx]*3; return grad3[g]*x+grad3[g+1]*y+grad3[g+2]*z; }
+                    const t0=0.6-x0*x0-y0*y0-z0*z0; n0=t0<0?0:t0*t0*t0*t0*dot(ii+perm[jj+perm[kk]], x0,y0,z0);
+                    const t1=0.6-x1*x1-y1*y1-z1*z1; n1=t1<0?0:t1*t1*t1*t1*dot(ii+i1+perm[jj+j1+perm[kk+k1]], x1,y1,z1);
+                    const t2=0.6-x2*x2-y2*y2-z2*z2; n2=t2<0?0:t2*t2*t2*t2*dot(ii+i2+perm[jj+j2+perm[kk+k2]], x2,y2,z2);
+                    const t3=0.6-x3*x3-y3*y3-z3*z3; n3=t3<0?0:t3*t3*t3*t3*dot(ii+1+perm[jj+1+perm[kk+1]], x3,y3,z3);
+                    return 32.0*(n0+n1+n2+n3);
+                }
+            };
+        })();
+
+        // --- RENDER SETUP ---
+        const bgCanvas = document.getElementById('bgCanvas');
+        const fgCanvas = document.getElementById('fgCanvas');
+        const ctx = bgCanvas.getContext('2d', { alpha: false });
+        const fgCtx = fgCanvas.getContext('2d');
+        
+        // Mask Canvas for Day Mode "Reveal" Effect
+        const maskCanvas = document.createElement('canvas');
+        const maskCtx = maskCanvas.getContext('2d');
+
+        let canvasW, canvasH, dpr;
+        let particles = [], stars = [], bgStars = [], meteors = [];
+        let time = 0;
+        let mouse = { x: -9999, y: -9999, active: false };
+        let isNight = false; // Default Day Mode
+        let activeStar = null; 
+        let isWarping = false; // WARP STATE
+        const audio = new AudioEngine();
+        
+        // Drag trail state
+        let isDragging = false;
+        let lastX = 0, lastY = 0; // For interpolation
+
+        // --- MOUSE FOLLOWER ---
+        const cursorFollower = document.getElementById('custom-cursor');
+        let cursorX = -100, cursorY = -100;
+        let followX = -100, followY = -100;
+
+        // --- DAY MODE: ASCII FIELD ---
+        const chars = ".,:;*+o%@"; 
+        let asciiGrid = [];
+        let cols, rows, cellSize = 20;
+
+        function initAscii() {
+            cellSize = 16 * dpr; 
+            cols = Math.ceil(canvasW / cellSize);
+            rows = Math.ceil(canvasH / cellSize);
+            asciiGrid = [];
+            for(let y=0; y<rows; y++) {
+                for(let x=0; x<cols; x++) {
+                    asciiGrid.push({
+                        x: x * cellSize,
+                        y: y * cellSize,
+                        baseNoise: Math.random() * 100
+                    });
+                }
+            }
+        }
+
+        // --- 3D ASCII MORPHING MOBIUS STRIP (DAY MODE INTRO) ---
+        class AsciiMobius {
+            constructor() {
+                this.points = [];
+            }
+            
+            init() {
+                this.points = [];
+                const count = 3000; // Increase count for solid look
+                const R = 320 * dpr; 
+                const width = 50 * dpr;    // Ribbon Width
+                const depth = 15 * dpr;    // Ribbon Thickness (Volumetric)
+                
+                for(let i=0; i<count; i++) {
+                    const u = Math.random() * Math.PI * 2; 
+                    const v = (Math.random() * 2) - 1; // Width factor (-1 to 1)
+                    const t = (Math.random() * 2) - 1; // Thickness factor (-1 to 1)
+                    
+                    const symbols = ['∞', '8', '*', '+', '·', 'o', '~', '•'];
+                    this.points.push({ 
+                        u, v, t, R, width, depth,
+                        char: symbols[Math.floor(Math.random() * symbols.length)] 
+                    });
+                }
+            }
+
+            draw(ctx, t) {
+                if (this.points.length === 0) this.init(); 
+
+                const cx = canvasW / 2;
+                const cy = canvasH * 0.50; 
+                
+                // Rotation
+                const rotX = t * 0.004; 
+                const rotY = t * 0.009;
+
+                ctx.font = `bold ${16 * dpr}px 'Press Start 2P'`; 
+                ctx.textAlign = 'center';
+
+                this.points.forEach(p => {
+                    const u2 = p.u / 2;
+
+                    // Orthogonal displacement for twisted ribbon with thickness
+                    // W direction: cos(u/2), sin(u/2)
+                    // T direction: -sin(u/2), cos(u/2)
+
+                    // Displacement in cross-section plane
+                    // radial_disp contributes to the distance from the Z-axis (major radius)
+                    // z_disp contributes to the height (Z-axis)
+                    const radial_disp = p.width * p.v * Math.cos(u2) - p.depth * p.t * Math.sin(u2);
+                    const z_disp      = p.width * p.v * Math.sin(u2) + p.depth * p.t * Math.cos(u2);
+
+                    const D = p.R + radial_disp;
+
+                    // Map to Infinity (Lissajous) path
+                    let x = D * Math.cos(p.u);
+                    let y = D * Math.sin(2 * p.u) * 0.5; // Figure-8 in XY plane
+                    let z = z_disp;
+
+                    // Rotate Y
+                    let x1 = x * Math.cos(rotY) + z * Math.sin(rotY);
+                    let z1 = -x * Math.sin(rotY) + z * Math.cos(rotY);
+                    
+                    // Rotate X
+                    let y1 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
+                    let z2 = y * Math.sin(rotX) + z1 * Math.cos(rotX);
+
+                    const scale = 800 / (800 + z2);
+                    const sx = cx + x1 * scale;
+                    const sy = cy + y1 * scale;
+                    const alpha = (z2 + 400) / 800; 
+                    
+                    // Red color
+                    ctx.fillStyle = `rgba(80, 160, 230, ${Math.max(0.2, Math.min(alpha, 1))})`; 
+                    
+                    if (alpha > 0.1) {
+                        ctx.fillText(p.char, sx, sy);
+                    }
+                });
+            }
+        }
+        const asciiMobius = new AsciiMobius();
+
+        // --- INTRO FANCY 3D SHAPE (NIGHT) ---
+        class IntroShape {
+            constructor() {
+               this.points = [];
+            }
+            init() {
+                this.points = [];
+                const count = 400; 
+                for(let i=0; i<count; i++) {
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.acos(2 * Math.random() - 1);
+                    const r = 180; 
+                    this.points.push({ theta, phi, r, baseR: r, offset: Math.random() * 100, colorHue: Math.random() * 40 + 20 });
+                }
+            }
+            draw(ctx, t) {
+                if (this.points.length === 0) this.init();
+                const cx = canvasW / 2;
+                const cy = canvasH * 0.45; 
+                const rotX = t * 0.003; const rotY = t * 0.005;
+                ctx.globalAlpha = 0.15; 
+                ctx.strokeStyle = isNight ? 'rgba(242, 201, 76, 0.3)' : 'rgba(30, 41, 59, 0.2)';
+                ctx.beginPath();
+                this.points.forEach(p => {
+                    const morph = Math.sin(t * 0.02 + p.offset) * 30;
+                    const curR = p.baseR + morph;
+                    let x = curR * Math.sin(p.phi) * Math.cos(p.theta);
+                    let y = curR * Math.sin(p.phi) * Math.sin(p.theta);
+                    let z = curR * Math.cos(p.phi);
+                    let y1 = y * Math.cos(rotX) - z * Math.sin(rotX);
+                    let z1 = y * Math.sin(rotX) + z * Math.cos(rotX);
+                    let x1 = x * Math.cos(rotY) + z1 * Math.sin(rotY);
+                    let z2 = -x * Math.sin(rotY) + z1 * Math.cos(rotY);
+                    const scale = 800 / (800 + z2);
+                    const sx = cx + x1 * scale * dpr;
+                    const sy = cy + y1 * scale * dpr;
+                    const size = 1.5 * scale * dpr;
+                    ctx.moveTo(sx, sy); ctx.lineTo(sx + 2, sy);
+                });
+                ctx.stroke(); ctx.globalAlpha = 1.0;
+            }
+        }
+        const introShape = new IntroShape();
+
+
+        // --- DAY MODE OBJECTS ---
+        let shapeDots = [];
+        let trailPoints = []; 
+        let nightSceneBuffer; 
+
+        // --- NIGHT MODE CLASSES ---
+        class Meteor {
+            constructor() { this.reset(); }
+            reset() {
+                if (Math.random() < 0.5) { this.x = Math.random() * canvasW; this.y = -100; } 
+                else { this.x = canvasW + 100; this.y = Math.random() * canvasH * 0.5; }
+                const speed = (Math.random() * 12 + 10) * dpr;
+                const angle = Math.PI * 0.75 + (Math.random() - 0.5) * 0.15; 
+                this.vx = Math.cos(angle) * speed; this.vy = Math.sin(angle) * speed;
+                this.len = (Math.random() * 200 + 150) * dpr; this.size = (Math.random() * 2 + 1) * dpr;
+            }
+            update() {
+                if (isWarping) {
+                    // Accelerate outward during warp
+                    this.x += (this.x - canvasW/2) * 0.1;
+                    this.y += (this.y - canvasH/2) * 0.1;
+                    return true; 
+                }
+                this.x += this.vx; this.y += this.vy;
+                if (this.x < -this.len || this.y > canvasH + this.len) return false;
+                return true;
+            }
+            draw(ctx) {
+                const grad = ctx.createLinearGradient(this.x, this.y, this.x - this.vx*0.5, this.y - this.vy*0.5);
+                grad.addColorStop(0, 'rgba(255, 255, 255, 1)'); grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.strokeStyle = grad; ctx.lineWidth = this.size; ctx.lineCap = 'round';
+                ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - this.vx * (this.len/25), this.y - this.vy * (this.len/25)); ctx.stroke();
+                ctx.shadowBlur = 10; ctx.shadowColor = "white"; ctx.fillStyle = "white";
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size * 0.8, 0, Math.PI*2); ctx.fill(); ctx.shadowBlur = 0;
+            }
+        }
+
+        class Particle {
+            constructor() { this.reset(true); }
+            reset(randY=false) {
+                this.x = Math.random() * canvasW;
+                this.y = randY ? Math.random() * canvasH : Math.random() * canvasH;
+                const angle = Math.random() * Math.PI * 2;
+                this.baseSpeed = 0; const r = Math.random();
+                if (r < 0.02) { this.color = `hsla(${45+Math.random()*10}, 90%, 60%,`; this.baseSpeed = 0.8; this.size = 1.5 * dpr; } 
+                else if (r < 0.15) { this.color = `hsla(${200+Math.random()*20}, 60%, 40%,`; this.baseSpeed = 0.6; this.size = 1.2 * dpr; } 
+                else { this.color = `hsla(${220+Math.random()*20}, 50%, ${10+Math.random()*10}%,`; this.baseSpeed = 0.4; this.size = 0.9 * dpr; }
+                const driftSpeed = this.baseSpeed * 0.3; 
+                this.vx = Math.cos(angle) * driftSpeed; this.vy = Math.sin(angle) * driftSpeed;
+                this.pushX = 0; this.pushY = 0;
+                this.life = Math.random() * 200 + 100; this.age = 0;
+            }
+            update() {
+                // WARP MODE OVERRIDE
+                if (isWarping) {
+                    const dx = this.x - canvasW/2;
+                    const dy = this.y - canvasH/2;
+                    const angle = Math.atan2(dy, dx);
+                    // Accelerate exponentially outward
+                    const speed = 30 * dpr; 
+                    this.x += Math.cos(angle) * speed;
+                    this.y += Math.sin(angle) * speed;
+                    return; // Skip normal physics
+                }
+
+                if(mouse.active && isNight) {
+                    const dx = this.x - mouse.x; const dy = this.y - mouse.y;
+                    const distSq = dx*dx + dy*dy; const R = 250 * dpr; 
+                    if(distSq < R*R) {
+                        const f = (1 - distSq/(R*R)) * 0.05; 
+                        const a = Math.atan2(dy, dx);
+                        this.pushX += Math.cos(a) * f; this.pushY += Math.sin(a) * f;
+                    }
+                }
+                this.pushX *= 0.95; this.pushY *= 0.95;
+                this.x += this.vx * dpr + (this.pushX * this.baseSpeed * dpr * 2.0);
+                this.y += this.vy * dpr + (this.pushY * this.baseSpeed * dpr * 2.0);
+                if(this.x < -50) this.x = canvasW+50; if(this.x > canvasW+50) this.x = -50;
+                if(this.y < -50) this.y = canvasH+50; if(this.y > canvasH+50) this.y = -50;
+                this.age++; if(this.age > this.life) this.reset();
+            }
+            draw(c) {
+                // WARP VISUAL (Streaks)
+                if (isWarping) {
+                    c.strokeStyle = this.color + '0.8)';
+                    c.lineWidth = this.size;
+                    c.beginPath();
+                    c.moveTo(this.x, this.y);
+                    // Draw trail towards center
+                    const dx = this.x - canvasW/2;
+                    const dy = this.y - canvasH/2;
+                    const angle = Math.atan2(dy, dx);
+                    c.lineTo(this.x - Math.cos(angle)*50*dpr, this.y - Math.sin(angle)*50*dpr);
+                    c.stroke();
+                    return;
+                }
+                
+                const a = Math.min(1, (this.life - this.age)/30) * 0.85;
+                c.fillStyle = this.color + a + ')';
+                c.beginPath(); c.arc(this.x, this.y, this.size * 0.8, 0, Math.PI * 2); c.fill();
+            }
+        }
+
+        // --- UPDATED STAR CLASS FOR DRAG TRAIL ---
+        class Star {
+            constructor(x, y) {
+                this.x = x; 
+                this.y = y;
+                this.maxRadius = 22 * dpr; // Target size
+                this.radius = 1 * dpr;     // Start tiny
+                this.life = 1.0; 
+                this.hue = 45 + Math.random() * 10; 
+                this.growing = true;       // State flag
+            }
+            update() {
+                if (this.growing) {
+                    this.radius += 1.5 * dpr; // Grow speed
+                    if (this.radius >= this.maxRadius) {
+                        this.growing = false;
+                    }
+                } else {
+                    this.radius *= 0.96; // Slower shrink (was 0.94 then 0.95)
+                    this.life -= 0.01;   // Slower fade (was 0.015)
+                }
+                return this.life > 0 && this.radius > 0.5;
+            }
+            draw(c) {
+                // Lower lightness (60%) and opacity multiplier (0.7)
+                const g = c.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 2);
+                g.addColorStop(0, `hsla(${this.hue}, 90%, 60%, ${this.life * 0.7})`); 
+                g.addColorStop(1, `hsla(${this.hue}, 100%, 50%, 0)`); 
+                
+                c.globalCompositeOperation = 'screen'; 
+                c.fillStyle = g; 
+                c.beginPath(); 
+                c.arc(this.x, this.y, this.radius * 2, 0, Math.PI*2); 
+                c.fill();
+                c.globalCompositeOperation = 'source-over';
+            }
+        }
+
+        class StaticStar {
+            constructor() {
+                this.x = Math.random() * canvasW; this.y = Math.random() * canvasH;
+                this.size = (Math.random() * 1.2 + 0.8) * dpr;
+                if (Math.random() < 0.3) {
+                    this.isTwinkle = true; this.hue = 210; this.saturation = '100%'; this.lightness = '85%';
+                    this.baseAlpha = Math.random() * 0.5 + 0.5; this.phase = Math.random() * Math.PI * 2;
+                    this.twinkleSpeed = Math.random() * 0.05 + 0.03;
+                } else {
+                    this.isTwinkle = false; this.hue = 0; this.saturation = '0%'; this.lightness = '100%';
+                    this.baseAlpha = Math.random() * 0.4 + 0.2; 
+                }
+            }
+            draw(c) {
+                if(!isNight) return; 
+                let alpha = this.baseAlpha;
+                if (this.isTwinkle) {
+                    this.phase += this.twinkleSpeed; alpha += Math.sin(this.phase) * 0.3; 
+                }
+                if(alpha < 0) alpha = 0; if(alpha > 1) alpha = 1; if (alpha <= 0) return;
+                c.fillStyle = `hsla(${this.hue}, ${this.saturation}, ${this.lightness}, ${alpha})`;
+                c.beginPath(); c.arc(this.x, this.y, this.size, 0, Math.PI*2); c.fill();
+            }
+        }
+
+        function drawMountains(c) {
+            if (!isNight) { 
+                // DAY MODE: Don't draw mountains, clear canvas
+                c.clearRect(0, 0, canvasW, canvasH);
+                return;
+            }
+
+            // NIGHT MODE: Draw Mountains
+            // REMOVED THE BUGGY clearRect HERE
+            c.clearRect(0, 0, canvasW, canvasH); 
+            
+            const mx = canvasW * 0.85, my = canvasH * 0.12; const r = Math.min(50 * dpr, canvasW * 0.1);
+            
+            c.save();
+            const g = c.createRadialGradient(mx, my, r, mx, my, r*6);
+            g.addColorStop(0, 'rgba(242, 201, 76, 0.15)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+            c.fillStyle = g; c.beginPath(); c.arc(mx, my, r*6, 0, Math.PI*2); c.fill();
+            c.shadowColor = '#F2994A'; c.shadowBlur = 30; c.fillStyle = '#F2C94C';
+            c.beginPath(); c.arc(mx, my, r, 0, Math.PI*2); c.fill();
+            c.shadowBlur = 0;
+            c.globalCompositeOperation = 'destination-out';
+            c.beginPath(); c.arc(mx - r*0.25, my - r*0.25, r*0.93, 0, Math.PI*2); c.fill();
+            c.globalCompositeOperation = 'source-over';
+            c.restore();
+
+            const horizon = canvasH * 0.88;
+            c.fillStyle = 'rgba(15, 23, 42, 0.5)'; 
+            c.beginPath(); c.moveTo(0, canvasH);
+            for(let x = 0; x <= canvasW; x += 10) { const n = Simplex.noise2D(x * 0.0015, 0) * 60 * dpr; c.lineTo(x, horizon - n); }
+            c.lineTo(canvasW, canvasH); c.fill();
+
+            const grad = c.createLinearGradient(0, canvasH*0.7, 0, canvasH);
+            grad.addColorStop(0, '#020617'); grad.addColorStop(1, '#0f172a');
+            c.fillStyle = grad; c.beginPath(); c.moveTo(0, canvasH);
+            for(let x = 0; x <= canvasW; x += 10) { const n = Simplex.noise2D(x * 0.0025, 100) * 40 * dpr; c.lineTo(x, horizon + 30*dpr - n); }
+            c.lineTo(canvasW, canvasH); c.fill();
+
+            c.fillStyle = '#000205'; 
+            c.beginPath();
+            const tx = canvasW * 0.12, tw = canvasW * 0.1; c.moveTo(tx, canvasH + 10);
+            let cy = canvasH;
+            while(cy > canvasH * 0.18) { cy -= 8; const p = (canvasH - cy)/canvasH; const wave = Simplex.noise2D(cy*0.008, 0) * 15 * dpr; const width = tw * (1-p) * 0.7; c.lineTo(tx - width + wave, cy); }
+            c.lineTo(tx, canvasH * 0.15); 
+            while(cy < canvasH) { cy += 8; const p = (canvasH - cy)/canvasH; const wave = Simplex.noise2D(cy*0.008, 200) * 15 * dpr; const width = tw * (1-p) * 0.7; c.lineTo(tx + width + wave, cy); }
+            c.fill();
+        }
+
+        function resize() {
+            dpr = window.devicePixelRatio || 1; canvasW = window.innerWidth * dpr; canvasH = window.innerHeight * dpr;
+            if (canvasW === 0 || canvasH === 0) return; 
+
+            [bgCanvas, fgCanvas, maskCanvas].forEach(c => { c.width = canvasW; c.height = canvasH; c.style.width = window.innerWidth + 'px'; c.style.height = window.innerHeight + 'px'; });
+            
+            const count = Math.min(4000, Math.floor(canvasW*canvasH/800));
+            particles = []; for(let i=0; i<count; i++) particles.push(new Particle());
+            bgStars = []; for(let i=0; i<350; i++) bgStars.push(new StaticStar());
+            meteors = [];
+            trailPoints = [];
+            
+            initAscii(); // Initialize ASCII Grid for Day Mode
+            
+            // Initialize Donut/Sphere geometries based on new dimensions
+            asciiMobius.init(); // UPDATED NAME
+            introShape.init();
+            
+            // Initialize Night Scene Buffer (Snapshot of static elements)
+            nightSceneBuffer = document.createElement('canvas');
+            nightSceneBuffer.width = canvasW;
+            nightSceneBuffer.height = canvasH;
+            
+            drawMountains(fgCtx);
+            // Draw initial static night scene onto the buffer
+            drawInitialNightScene(); 
+        }
+
+        function drawInitialNightScene() {
+            if (!nightSceneBuffer) return; 
+            const bCtx = nightSceneBuffer.getContext('2d');
+            bCtx.fillStyle = '#020617'; 
+            bCtx.fillRect(0, 0, canvasW, canvasH);
+            bgStars.forEach(s => s.draw(bCtx));
+        }
+
+        function animate() {
+            if (!canvasW || !canvasH) { requestAnimationFrame(animate); return; }
+
+            // 1. Render NIGHT MODE if we are warping, even if in day mode
+            // This allows the "time travel" to happen in space
+            const forceNight = isWarping; 
+            const renderNight = isNight; 
+
+            if (renderNight) {
+                ctx.fillStyle = isWarping ? 'rgba(0,0,0,0.1)' : 'rgba(2, 6, 23, 0.25)'; // Less clear on warp for trails
+                ctx.fillRect(0, 0, canvasW, canvasH);
+                
+                if(Math.random() < 0.003) meteors.push(new Meteor());
+                bgStars.forEach(s => s.draw(ctx));
+                particles.forEach(p => { p.update(); p.draw(ctx); });
+                
+                // ADDED LOGIC: CONTINUOUS SPAWN WHILE DRAGGING
+                if (isNight && isDragging) {
+                     // INTERPOLATION LOGIC
+                     const dx = cursorX - lastX;
+                     const dy = cursorY - lastY;
+                     const dist = Math.hypot(dx, dy);
+                     
+                     // If distance is small (static), just spawn one star
+                     if (dist < 5) {
+                         stars.push(new Star(cursorX * dpr, cursorY * dpr));
+                     } else {
+                         // If moving fast, fill gap
+                         const steps = Math.ceil(dist / 5); 
+                         for (let i = 0; i < steps; i++) {
+                             const t = i / steps;
+                             const starX = (lastX + dx * t) * dpr;
+                             const starY = (lastY + dy * t) * dpr;
+                             stars.push(new Star(starX, starY));
+                         }
+                     }
+                }
+                lastX = cursorX;
+                lastY = cursorY;
+
+                // Handle Stars (Trails)
+                stars = stars.filter(s => { const alive = s.update(); if(alive) s.draw(ctx); return alive; });
+                
+                meteors = meteors.filter(m => { const alive = m.update(); if(alive) m.draw(ctx); return alive; });
+            } else {
+                // DAY MODE: ASCII FLOW
+                // IF WARPING, KEEP BACKGROUND CLEAR/WHITE
+                if (isWarping) {
+                    ctx.fillStyle = '#f8fafc'; // Flash White/Light color
+                    ctx.fillRect(0, 0, canvasW, canvasH);
+                } else {
+                    ctx.fillStyle = '#f2f2f2'; 
+                    ctx.fillRect(0, 0, canvasW, canvasH);
+                    
+                    ctx.font = `bold ${10 * dpr}px 'Space Mono'`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    
+                    const t = time * 0.001; 
+                    // INTRO CHECK: Only render grid if Intro Overlay is HIDDEN
+                    const introOverlay = document.getElementById('intro-overlay');
+                    const isIntroVisible = introOverlay && introOverlay.style.display !== 'none' && introOverlay.style.opacity !== '0';
+                    
+                    // Draw Flowing ASCII ONLY on Main Page (When intro is gone)
+                    if (!isIntroVisible && asciiGrid.length > 0) {
+                        asciiGrid.forEach(cell => {
+                            let n = Simplex.noise3D(cell.x * 0.002, cell.y * 0.002, t) * 0.5 + 0.5;
+                            if (mouse.active) {
+                                const dx = cell.x - mouse.x; const dy = cell.y - mouse.y;
+                                const dist = Math.sqrt(dx*dx + dy*dy);
+                                if (dist < 200 * dpr) n += (1 - dist / (200 * dpr)) * 0.8;
+                            }
+                            const index = Math.floor(n * (chars.length - 1));
+                            const char = chars[Math.max(0, Math.min(index, chars.length - 1))];
+                            if (char !== '.') {
+                                // Use red color for ASCII flow
+                                ctx.fillStyle = n > 0.6 ? '#e63946' : '#ffb3b3';
+                                ctx.fillText(char, cell.x, cell.y);
+                            }
+                        });
+                    }
+                }
+            }
+
+            // RENDER INTRO FANCY SHAPE (DONUT / SPHERE)
+            const introOverlay = document.getElementById('intro-overlay');
+            if (introOverlay && introOverlay.style.display !== 'none' && introOverlay.style.opacity !== '0') {
+                 if (!isNight) {
+                     asciiMobius.draw(ctx, time); // UPDATED to Mobius
+                 } else {
+                     introShape.draw(ctx, time);
+                 }
+            }
+
+            time += 1;
+            requestAnimationFrame(animate);
+        }
+
+        function handleMove(x, y) {
+            // Update global cursor position variables for the follower
+            cursorX = x; 
+            cursorY = y;
+            
+            // Update cursor position directly (no lag)
+            const follower = document.getElementById('custom-cursor');
+            if (follower) {
+                follower.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+            }
+
+            x *= dpr; y *= dpr;
+            mouse.x = x; mouse.y = y; mouse.active = true; 
+            clearTimeout(mouse.timer); 
+            mouse.timer = setTimeout(() => mouse.active = false, 100);
+            
+            // Magnetic Button Logic
+            const btn = document.querySelector('.magnetic-btn');
+            if(btn) {
+                const rect = btn.getBoundingClientRect();
+                const btnX = rect.left + rect.width/2;
+                const btnY = rect.top + rect.height/2;
+                // Unscaled Coords for DOM
+                const rawX = x / dpr;
+                const rawY = y / dpr;
+                
+                const dist = Math.hypot(rawX - btnX, rawY - btnY);
+                const threshold = 100; 
+                
+                if(dist < threshold) {
+                    const pull = 0.4; 
+                    const dx = (rawX - btnX) * pull;
+                    const dy = (rawY - btnY) * pull;
+                    btn.style.transform = `translate(${dx}px, ${dy}px)`;
+                } else {
+                    btn.style.transform = `translate(0, 0)`;
+                }
+            }
+        }
+
+        // Cursor Follower Animation Loop (Independent of canvas loop for smoothness)
+        function updateCursor() {
+            // Smooth follow logic
+            followX += (cursorX - followX) * 0.2;
+            followY += (cursorY - followY) * 0.2;
+            
+            const follower = document.getElementById('custom-cursor');
+            if (follower) {
+                follower.style.transform = `translate(${followX}px, ${followY}px)`;
+            }
+            requestAnimationFrame(updateCursor);
+        }
+        updateCursor(); // Start the cursor loop
+
+
+        // Cursor Hover Listeners (UPDATED: REMOVED .glass-card and .group)
+        document.addEventListener('mouseover', (e) => {
+            const target = e.target.closest('a, button, .project-link, .card-fan, .internship-banner, .js-theme-toggle, .group h3');
+            // REMOVED .glass-card and .group from general hover to stop section flashing
+            if (target) {
+                document.getElementById('custom-cursor').classList.add('hovering');
+            }
+        });
+        document.addEventListener('mouseout', (e) => {
+            const target = e.target.closest('a, button, .project-link, .card-fan, .internship-banner, .js-theme-toggle, .group h3');
+            if (target) {
+                 document.getElementById('custom-cursor').classList.remove('hovering');
+            }
+        });
+
+
+        function handlePress(x, y) {
+            isDragging = true; // Start trail
+            // Update cursor vars immediately for instant trail start
+            cursorX = x; cursorY = y;
+            lastX = x; lastY = y; // Reset interpolation start point
+
+            x *= dpr; y *= dpr;
+            if (isNight && !isWarping) {
+                activeStar = new Star(x, y);
+                stars.push(activeStar);
+                audio.playChime();
+            }
+            mouse.x = x; mouse.y = y; mouse.active = true;
+        }
+
+        function handleRelease() {
+            isDragging = false; // Stop trail
+            // activeStar logic removed as requested
+        }
+        
+        // TEXT SCRAMBLE CLASS
+        class TextScramble {
+            constructor(el) {
+                this.el = el;
+                this.chars = '!<>-_\\/[]{}—=+*^?#________';
+                this.update = this.update.bind(this);
+            }
+            setText(newText) {
+                const oldText = this.el.innerText;
+                const length = Math.max(oldText.length, newText.length);
+                const promise = new Promise((resolve) => this.resolve = resolve);
+                this.queue = [];
+                for (let i = 0; i < length; i++) {
+                    const from = oldText[i] || '';
+                    const to = newText[i] || '';
+                    const start = Math.floor(Math.random() * 40);
+                    const end = start + Math.floor(Math.random() * 40);
+                    this.queue.push({ from, to, start, end });
+                }
+                cancelAnimationFrame(this.frameRequest);
+                this.frame = 0;
+                this.update();
+                return promise;
+            }
+            update() {
+                let output = '';
+                let complete = 0;
+                for (let i = 0, n = this.queue.length; i < n; i++) {
+                    let { from, to, start, end, char } = this.queue[i];
+                    if (this.frame >= end) {
+                        complete++;
+                        output += to;
+                    } else if (this.frame >= start) {
+                        if (!char || Math.random() < 0.28) {
+                            char = this.randomChar();
+                            this.queue[i].char = char;
+                        }
+                        output += `<span class="dud">${char}</span>`;
+                    } else {
+                        output += from;
+                    }
+                }
+                this.el.innerHTML = output;
+                if (complete === this.queue.length) {
+                    this.resolve();
+                } else {
+                    this.frameRequest = requestAnimationFrame(this.update);
+                    this.frame++;
+                }
+            }
+            randomChar() {
+                return this.chars[Math.floor(Math.random() * this.chars.length)];
+            }
+        }
+
+        // --- DYNAMIC CARD COLOR UPDATE ---
+        function updateCardSuits() {
+            const c1 = document.querySelector('.c1'); // Joker
+            const c2 = document.querySelector('.c2');
+            const c3 = document.querySelector('.c3');
+            const c4 = document.querySelector('.c4');
+            const c5 = document.querySelector('.c5');
+            
+            if (!c2) return; // Safety
+
+            if (!isNight) {
+                // DAY MODE: Red (Joker), Black, Red, Black, Red
+                // C1 (Joker) is Red (via CSS .day-mode .c1)
+                c2.textContent = '♠'; // Black (Spade)
+                c3.textContent = '♥'; // Red (Heart)
+                c4.textContent = '♣'; // Black (Club)
+                c5.textContent = '♦'; // Red (Diamond)
+            } else {
+                // NIGHT MODE: Black (Joker), Red, Black, Red, Black
+                // C1 (Joker) is Black (Default CSS)
+                c2.textContent = '♥'; // Red (Heart)
+                c3.textContent = '♣'; // Black (Club)
+                c4.textContent = '♦'; // Red (Diamond)
+                c5.textContent = '♠'; // Black (Spade)
+            }
+        }
+
+        // Start Logic
+        const startBtn = document.getElementById('startBtn');
+        const warpFlash = document.getElementById('warp-flash');
+        const introTextContainer = document.querySelector('#intro-content');
+
+        startBtn.addEventListener('click', async () => {
+            await audio.init();
+            
+            // Check mode for transition type
+            if (isNight) {
+                 // NIGHT MODE: Fade
+                 document.getElementById('intro-overlay').classList.add('fade-out');
+                 setTimeout(() => {
+                     document.getElementById('intro-overlay').style.display = 'none';
+                     document.getElementById('content-layer').classList.add('fade-in-active');
+                 }, 800);
+            } else {
+                // Day Mode: Warp Effect
+                isWarping = true;
+                if(introTextContainer) introTextContainer.classList.add('warp-out-active');
+                
+                setTimeout(() => {
+                    warpFlash.classList.add('active');
+                    setTimeout(() => {
+                        document.getElementById('intro-overlay').style.display = 'none';
+                        document.getElementById('content-layer').classList.add('fade-in-active');
+                        isWarping = false; 
+                        warpFlash.classList.remove('active'); 
+                    }, 400); 
+                }, 600);
+            }
+        });
+
+        // Initial Scramble
+        const el = document.querySelector('#scramble-text');
+        const fx = new TextScramble(el);
+        setTimeout(() => {
+            fx.setText('Keyi Chen');
+        }, 500);
+
+        window.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
+        window.addEventListener('touchmove', e => handleMove(e.touches[0].clientX, e.touches[0].clientY));
+        window.addEventListener('mousedown', e => handlePress(e.clientX, e.clientY));
+        window.addEventListener('touchstart', e => handlePress(e.touches[0].clientX, e.touches[0].clientY));
+        window.addEventListener('mouseup', () => handleRelease());
+        window.addEventListener('touchend', () => handleRelease());
+        window.addEventListener('resize', resize);
+
+        const themeBtns = document.querySelectorAll('.js-theme-toggle');
+        themeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                isNight = !isNight;
+                document.body.classList.toggle('day-mode');
+                const iconName = isNight ? 'dark_mode' : 'light_mode';
+                themeBtns.forEach(b => { b.querySelector('span').textContent = iconName; });
+                
+                // Fix Mountains Logic
+                drawMountains(fgCtx); 
+                
+                // Fix Card Suits Logic
+                updateCardSuits();
+            });
+        });
+        
+        // Copy Email Logic
+        const emailBtn = document.getElementById('emailBtn');
+        const emailText = document.getElementById('emailText');
+        if (emailBtn) {
+            emailBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const textarea = document.createElement('textarea');
+                textarea.value = "keyichen@andrew.cmu.edu";
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                const originalText = emailText.textContent;
+                emailText.textContent = "Copied!";
+                emailBtn.classList.add('text-[#F2C94C]');
+                setTimeout(() => {
+                    emailText.textContent = originalText;
+                    emailBtn.classList.remove('text-[#F2C94C]');
+                }, 2000);
+            });
+        }
+
+        resize();
+        // Initialize correct card suits for default Day Mode
+        updateCardSuits();
+        fgCtx.clearRect(0, 0, canvasW, canvasH);
+        animate();
+
+    </script>
+
+</body>
+</html>
