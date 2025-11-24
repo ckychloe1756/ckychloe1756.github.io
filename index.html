@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <title>Keyi Chen | Website</title>
+    <meta content="Interactive Website of Keyi Chen - Mathematics, Machine Learning, and Generative AI." name="description">
+    
+    <!-- Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           CORE LAYOUT & NIGHT MODE (DEFAULT)
+           ========================================= */
+        body {
+            margin: 0;
+            background-color: #020617; /* Slate 950 */
+            color: #e2e8f0;
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+            cursor: none !important; /* HIDE DEFAULT CURSOR */
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        
+        /* FORCE HIDE CURSOR ON EVERYTHING */
+        a, button, .project-link, .card-fan, .internship-banner, * {
+            cursor: none !important;
+        }
+
+        .font-serif-display {
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        #custom-cursor {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 99999; /* Extremely high z-index */
+            transform: translate(-50%, -50%);
+            /* REMOVED transform from transition to eliminate movement lag */
+            transition: width 0.2s cubic-bezier(0.25, 1, 0.5, 1), 
+                        height 0.2s cubic-bezier(0.25, 1, 0.5, 1), 
+                        background-color 0.2s, 
+                        border-radius 0.2s, 
+                        border-color 0.2s,
+                        clip-path 0.2s;
+            mix-blend-mode: difference; 
+            will-change: transform, width, height;
+        }
+
+        /* NIGHT MODE CURSOR (Glowing Orb) */
+        body:not(.day-mode) #custom-cursor {
+            width: 12px;
+            height: 12px;
+            background-color: #F2C94C;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #F2C94C;
+        }
+        /* NIGHT HOVER STATE - Small Star with Strong Halo */
+        body:not(.day-mode) #custom-cursor.hovering {
+            width: 24px; 
+            height: 24px;
+            background-color: #F2C94C;
+            border-radius: 0; 
+            /* 4-Point Star Shape */
+            clip-path: polygon(50% 0%, 61% 35%, 100% 50%, 61% 65%, 50% 100%, 39% 65%, 0% 50%, 39% 35%);
+            /* Stronger Halo using Drop-Shadow */
+            filter: drop-shadow(0 0 5px #F2C94C) drop-shadow(0 0 15px #F2C94C);
+            transform: translate(-50%, -50%) rotate(180deg); 
+            mix-blend-mode: normal;
+        }
+
+        /* --- Glassmorphism (Night) --- */
+        .glass-card {
+            background: rgba(10, 15, 30, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(242, 201, 76, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(242, 201, 76, 0.3);
+            background: rgba(15, 23, 42, 0.85);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        /* --- Typography --- */
+        .section-title {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-bottom: 1.5rem; padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .project-link {
+            position: relative; color: #ffffff; text-decoration: none; font-weight: 600;
+            transition: color 0.3s; display: inline-flex; align-items: center; gap: 0.25rem;
+        }
+        .project-link::after {
+            content: ''; position: absolute; bottom: -2px; left: 0; width: 0%; height: 1px;
+            background-color: #F2C94C; transition: width 0.3s ease;
+        }
+        .project-link:hover, .group:hover .project-link { 
+            color: #F2C94C; text-shadow: 0 0 12px rgba(242, 201, 76, 0.5); 
+        }
+        .group:hover .project-link::after { width: 100%; }
+
+        /* --- Buttons (Night) --- */
+        .starry-btn {
+            padding: 14px 48px;
+            border: 1px solid rgba(242, 201, 76, 0.3);
+            border-radius: 99px;
+            color: #F2C94C;
+            background: rgba(242, 201, 76, 0.05);
+            font-size: 1.1rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1); 
+            display: flex; align-items: center; gap: 12px;
+            position: relative; 
+            z-index: 10; 
+        }
+        .starry-btn:hover {
+            background: #F2C94C; color: #020617;
+            box-shadow: 0 0 35px rgba(242, 201, 76, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* --- Intro Overlay (Night) --- */
+        #intro-overlay {
+            position: fixed; inset: 0; z-index: 100;
+            background-color: rgba(2, 6, 23, 0.5); 
+            backdrop-filter: blur(2px);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.4s ease, visibility 0.4s;
+            overflow: hidden; 
+        }
+        
+        /* Warp Out Animation */
+        @keyframes warp-zoom {
+            0% { transform: scale(1); opacity: 1; filter: blur(0px); }
+            40% { opacity: 0.8; }
+            100% { transform: scale(15); opacity: 0; filter: blur(10px); }
+        }
+        .warp-out-active {
+            animation: warp-zoom 0.6s cubic-bezier(0.7, 0, 0.84, 0) forwards; 
+            transform-origin: center center;
+        }
+
+        /* Flash Overlay for Warp Effect */
+        #warp-flash {
+            position: fixed; inset: 0; z-index: 200;
+            background-color: white;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.5s ease-out;
+        }
+        #warp-flash.active {
+            opacity: 1;
+            transition: opacity 0.05s ease-in; 
+        }
+
+        /* --- Night Animations --- */
+        @keyframes breathe-name {
+            0%, 100% { opacity: 1; text-shadow: 0 0 40px rgba(242,201,76,0.6); }
+            50% { opacity: 0.6; text-shadow: 0 0 5px rgba(242,201,76,0.1); }
+        }
+        @keyframes breathe-subtle { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+        @keyframes breathe-btn {
+            0%, 100% { border-color: rgba(242, 201, 76, 0.9); color: rgba(242, 201, 76, 1); background: rgba(242, 201, 76, 0.08); }
+            50% { border-color: rgba(242, 201, 76, 0.3); color: rgba(242, 201, 76, 0.6); background: rgba(242, 201, 76, 0.02); }
+        }
+        .animate-name { animation: breathe-name 2.5s ease-in-out infinite; }
+        .animate-subtitle { animation: breathe-subtle 2.5s ease-in-out infinite; }
+        .animate-btn-twinkle { animation: breathe-btn 2.5s ease-in-out infinite; }
+
+        /* --- PLAYING CARD FAN STYLE --- */
+        .card-fan {
+            position: relative;
+            width: 40px; 
+            height: 56px;
+            display: inline-block;
+            vertical-align: middle;
+            cursor: none; 
+            z-index: 10;
+        }
+        .p-card {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #fff;
+            border-radius: 4px;
+            border: 1px solid #999;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: 50% 100%; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+        }
+        
+        /* STACK THICKNESS EFFECT */
+        .c2 { transform: rotate(3deg) translate(2px, 1px); }
+        .c3 { transform: rotate(5deg) translate(3px, 2px); }
+        .c4 { transform: rotate(7deg) translate(4px, 3px); }
+        .c5 { transform: rotate(9deg) translate(5px, 4px); }
+
+        /* Card Colors - Default (Night Mode) */
+        /* REQ: Night Mode = Black (Joker), Red, Black, Red, Black */
+        .c1 { color: #1a1a1a; z-index: 5; } 
+        .c2 { color: #e63946; z-index: 4; } 
+        .c3 { color: #1a1a1a; z-index: 3; } 
+        .c4 { color: #e63946; z-index: 2; } 
+        .c5 { color: #1a1a1a; z-index: 1; } 
+
+        /* WIDER Fan Animation on Hover */
+        .card-fan:hover .c1 { transform: rotate(-60deg) translateX(-25px) translateY(5px); }
+        .card-fan:hover .c2 { transform: rotate(-30deg) translateX(-12px) translateY(-10px); }
+        .card-fan:hover .c3 { transform: rotate(0deg) translateY(-15px); }
+        .card-fan:hover .c4 { transform: rotate(30deg) translateX(12px) translateY(-10px); }
+        .card-fan:hover .c5 { transform: rotate(60deg) translateX(25px) translateY(5px); }
+
+
+        /* =========================================
+           DAY MODE OVERRIDES (CLEAN + PIXEL INTRO)
+           ========================================= */
+        body.day-mode {
+            background-color: #f8fafc; /* Slate 50 */
+            color: #1e293b; /* Slate 800 */
+            cursor: none;
+        }
+
+        /* DAY MODE CURSOR STYLE (Pixel Block) */
+        body.day-mode #custom-cursor {
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* Almost opaque white */
+            border: 3px solid #000000; /* Thick black box */
+            border-radius: 0; /* Square */
+            box-shadow: 3px 3px 0px rgba(230, 57, 70, 0.5); /* Retro Red Shadow */
+            mix-blend-mode: normal; 
+        }
+        /* Day Hover State: Solid YELLOW */
+        body.day-mode #custom-cursor.hovering {
+            background-color: #F2C94C; /* Solid Yellow */
+            transform: translate(-50%, -50%) scale(1.4) rotate(45deg); 
+            border-color: #000;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.4);
+            mix-blend-mode: normal;
+        }
+
+        /* Day Mode Text Overrides */
+        body.day-mode .text-white { color: #0f172a !important; text-shadow: none; } 
+        body.day-mode .text-slate-300 { color: #475569 !important; } 
+        body.day-mode .text-slate-400 { color: #64748b !important; }
+        body.day-mode .text-slate-500 { color: #94a3b8 !important; }
+        body.day-mode .text-\[\#F2C94C\] { color: #e63946 !important; background: transparent; padding: 0; } 
+        
+        /* 1. SPECIAL FONT FOR HEADERS & PROJECTS IN DAY MODE */
+        body.day-mode h1, body.day-mode h2, body.day-mode h3, 
+        body.day-mode .font-serif-display, body.day-mode .section-title,
+        body.day-mode .project-link,
+        body.day-mode .group h3 { 
+            font-family: 'Press Start 2P', cursive; 
+            letter-spacing: -1px;
+            line-height: 1.5;
+        }
+        
+        body.day-mode .text-6xl { font-size: 32px !important; } 
+        body.day-mode .text-8xl { font-size: 40px !important; }
+        body.day-mode .text-2xl { font-size: 20px !important; }
+        
+        /* Body: Mono Font */
+        body.day-mode p, body.day-mode li, body.day-mode nav, body.day-mode span,
+        body.day-mode .internship-banner {
+             font-family: 'Space Mono', monospace; 
+             font-size: 14px; 
+        }
+
+        /* RESET ICON FONT */
+        body.day-mode .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined' !important;
+            font-weight: normal;
+            font-style: normal;
+            letter-spacing: normal;
+            text-transform: none;
+        }
+        
+        /* === CRITICAL DAY MODE BOX STYLING === */
+        body.day-mode .glass-card {
+            background: #ffffff !important;
+            border: 4px solid #000000 !important; 
+            border-radius: 0px !important; 
+            box-shadow: 8px 8px 0px #000000 !important; 
+            backdrop-filter: none !important;
+            transform: none; 
+        }
+        body.day-mode .rounded-3xl, body.day-mode .rounded-full {
+            border-radius: 0px !important;
+        }
+        
+        body.day-mode .glass-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 12px 12px 0px #F2C94C !important; 
+            border-color: #000000 !important;
+        }
+        
+        /* Day Mode Link Hover */
+        body.day-mode .project-link { 
+            color: #1e293b; 
+            border-bottom: none; 
+        }
+        
+        body.day-mode .group:hover .project-link,
+        body.day-mode .group:hover h3 { 
+            color: #e63946 !important; 
+            text-shadow: none; 
+        }
+        
+        body.day-mode .project-link:hover { 
+            border-bottom: 2px solid #e63946; 
+        }
+
+        /* Day Mode Intro Overlay */
+        body.day-mode #intro-overlay {
+            background-color: transparent;
+            backdrop-filter: none;
+        }
+
+        /* --- DAY MODE SPECIFIC INTRO STYLES --- */
+        body.day-mode .animate-name {
+            animation: none;
+            text-shadow: 4px 4px 0px #000;
+            background-color: #F2C94C;
+            color: #000000 !important;
+            padding: 10px 20px;
+            display: inline-block;
+            transform: rotate(-2deg); 
+            font-size: 24px !important;
+            font-family: 'Press Start 2P', cursive; 
+        }
+        @media (min-width: 768px) {
+             body.day-mode .animate-name { font-size: 48px !important; }
+        }
+
+        body.day-mode .starry-btn {
+            animation: none;
+            background: #ffffff;
+            color: #000000;
+            border: 4px solid #000000;
+            border-radius: 0px !important;
+            box-shadow: 6px 6px 0px #000000;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            font-family: 'Press Start 2P', cursive;
+        }
+        
+        /* UPDATED: DAY MODE BUTTON HOVER - Yellow Shadow Only, Black Border */
+        body.day-mode .starry-btn:hover {
+            background: #ffffff; /* Keep background white */
+            color: #000000;
+            transform: translate(-2px, -2px);
+            border-color: #000000; /* KEEP BORDER BLACK */
+            box-shadow: 8px 8px 0px #F2C94C; /* YELLOW Shadow */
+        }
+        body.day-mode .starry-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px #000;
+        }
+        
+        /* MATCH INTERNSHIP NOTE SIZE */
+        body.day-mode .internship-banner {
+            background-color: #ffffff;
+            border: 1px solid #000000; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.1); 
+            opacity: 1;
+            z-index: 20;
+            padding-left: 1.5rem; padding-right: 1.5rem; 
+            padding-top: 0.5rem; padding-bottom: 0.5rem;
+            border-radius: 0px !important; 
+        }
+        body.day-mode .internship-banner:hover {
+             background-color: #fff;
+             box-shadow: 6px 6px 0px #F2C94C;
+        }
+        
+        body.day-mode .p-card {
+            border: 3px solid #000;
+            border-radius: 0;
+            box-shadow: 3px 3px 0 #000;
+            background-color: #fff;
+        }
+        /* ALTERNATING COLORS FOR DAY MODE */
+        body.day-mode .c1 { color: #e63946; } 
+        body.day-mode .c2 { color: #1a1a1a; } 
+        body.day-mode .c3 { color: #e63946; } 
+        body.day-mode .c4 { color: #1a1a1a; } 
+        body.day-mode .c5 { color: #e63946; } 
+
+        /* Fix Text Size for Joker in Day Mode */
+        body.day-mode .p-card span {
+            font-size: 5px; 
+            font-family: 'Press Start 2P', cursive;
+            letter-spacing: 1px; 
+        }
+        
+        /* THEME TOGGLE FIX */
+        body.day-mode .js-theme-toggle {
+            font-family: 'Press Start 2P', cursive;
+            background: #ffffff;
+            color: #000000;
+            border: 4px solid #000000;
+            border-radius: 0px !important;
+            box-shadow: 4px 4px 0px #000000;
+            width: 40px !important;
+            height: 40px !important;
+            padding: 0 !important; 
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }
+        body.day-mode .js-theme-toggle:hover {
+            background: #000000;
+            color: #ffffff;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0px #F2C94C;
+        }
+        
+        body.day-mode .animate-subtitle {
+            animation: none;
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+            color: #000;
+            background-color: rgba(255,255,255,0.8); 
+            padding: 5px;
+        }
+        
+        /* --- Canvas Layers --- */
+        canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
+        #bgCanvas { z-index: 0; }
+        #fgCanvas { z-index: 1; pointer-events: none; } 
+
+        /* --- Content Layer Animations --- */
+        #content-layer { position: relative; z-index: 10; display: none; min-height: 100vh; }
+        .fade-in-active { display: block !important; opacity: 1 !important; }
+        .fade-in-active header { animation: fadeIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        .fade-in-active main, .fade-in-active footer { animation: fadeInUp 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { transform: translateY(0); opacity: 1; } }
+
+        .fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        
+        body.day-mode ::-webkit-scrollbar-track { background: #f1f5f9; }
+        body.day-mode ::-webkit-scrollbar-thumb { background: #cbd5e1; }
+    </style>
+</head>
+<body class="day-mode"> <!-- DEFAULT: Light Mode -->
+
+    <!-- CUSTOM CURSOR -->
+    <div id="custom-cursor"></div>
+
+    <!-- Flash Overlay for Warp -->
+    <div id="warp-flash"></div>
+
+    <!-- VISUALS -->
+    <canvas id="bgCanvas"></canvas>
+    <canvas id="fgCanvas"></canvas>
+
+    <!-- INTRO -->
+    <div id="intro-overlay">
+        <button class="js-theme-toggle absolute top-6 right-6 z-[102] p-3 rounded-full glass-card text-[#F2C94C] hover:scale-110 transition-transform cursor-pointer border border-[#F2C94C]/20 flex items-center justify-center" title="Toggle Day/Night Mode">
+            <span class="material-symbols-outlined text-xl">light_mode</span>
+        </button>
+        
+        <div id="intro-content" class="text-center px-4 relative z-20"> 
+            <!-- 4. SMALLER NAME (One Line) -->
+            <h1 id="scramble-text" class="text-3xl md:text-5xl text-[#F2C94C] font-serif-display mb-8 tracking-wider animate-name whitespace-nowrap">Keyi Chen</h1>
+            <p class="text-slate-400 text-xs md:text-sm tracking-[0.4em] mb-16 font-light uppercase leading-relaxed animate-subtitle">Mathematics • Machine Learning • Generative AI</p>
+            <!-- Added 'magnetic-btn' class for js logic -->
+            <button class="starry-btn mx-auto group animate-btn-twinkle magnetic-btn" id="startBtn">
+                <span class="material-symbols-outlined group-hover:animate-spin">radio_button_unchecked</span>
+                Enter My Website
+            </button>
+        </div>
+        <div class="absolute bottom-10 text-slate-600 text-[10px] tracking-widest uppercase">Interactive Experience</div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="pb-32" id="content-layer">
+        <header class="glass-card !rounded-none border-b border-slate-800/60 sticky top-0 z-50 backdrop-blur-xl">
+            <div class="max-w-5xl mx-auto px-6 md:px-12 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-left">
+                    <h1 class="text-2xl text-[#F2C94C] font-serif-display tracking-wide">Keyi Chen</h1>
+                    <p class="text-xs text-slate-400 tracking-widest mt-1">M.S. ECE @ CMU | B.S. Math-CS & CogSci @ UCSD</p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <nav class="flex gap-6 text-sm text-slate-300">
+                        <a id="emailBtn" class="hover:text-[#F2C94C] transition-colors flex items-center gap-2 cursor-pointer" title="Copy Email to Clipboard">
+                            <span class="material-symbols-outlined text-lg">mail</span> <span id="emailText">Email</span>
+                        </a>
+                        <a class="hover:text-[#F2C94C] transition-colors flex items-center gap-2" href="https://github.com/kec020" target="_blank">
+                            <span class="material-symbols-outlined text-lg">code</span> GitHub
+                        </a>
+                        <a class="hover:text-[#F2C94C] transition-colors flex items-center gap-2" href="https://www.linkedin.com/in/keyichen1756/" target="_blank">
+                            <span class="material-symbols-outlined text-lg">person</span> LinkedIn
+                        </a>
+                    </nav>
+                    <button class="js-theme-toggle p-2 rounded-full glass-card text-[#F2C94C] hover:scale-110 transition-transform cursor-pointer border border-[#F2C94C]/20 flex items-center justify-center h-10 w-10" title="Toggle Day/Night Mode">
+                        <span class="material-symbols-outlined text-xl">light_mode</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-5xl mx-auto px-6 md:px-12 py-12 space-y-16">
+            
+            <!-- About Me Section -->
+            <section class="glass-card p-8 md:p-10 rounded-3xl">
+                <div class="section-title"><span class="material-symbols-outlined text-[#F2C94C] text-3xl">person</span><h2 class="text-2xl font-serif-display text-white">About Me</h2></div>
+                <div class="flex flex-col md:flex-row gap-8 items-start">
+                    <!-- Left Column: Photo + Card Fan -->
+                    <div class="w-full md:w-1/3 flex flex-col items-center gap-6">
+                        <!-- Photo -->
+                        <div class="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-[#F2C94C]/20 bg-slate-800 flex items-center justify-center shadow-lg">
+                            <span class="material-symbols-outlined text-6xl text-slate-600">image</span>
+                        </div>
+
+                        <!-- Card Fan on LEFT (ANCHORED) -->
+                        <div class="card-fan mt-2">
+                            <div class="p-card c1 flex flex-col items-center justify-center">
+                                <!-- Jester SVG -->
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L4 9L7 16L12 12L17 16L20 9L12 2Z" />
+                                    <circle cx="4" cy="9" r="1.5" />
+                                    <circle cx="20" cy="9" r="1.5" />
+                                    <circle cx="12" cy="2" r="1.5" />
+                                    <path d="M9 16C9 17.66 10.34 19 12 19C13.66 19 15 17.66 15 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span class="text-[8px] font-bold mt-1 tracking-widest">JOKER</span>
+                            </div>
+                            <!-- UPDATED ORDER & SUITS for alternating colors -->
+                            <div class="p-card c2">♠</div> <!-- Black -->
+                            <div class="p-card c3">♥</div> <!-- Red -->
+                            <div class="p-card c4">♣</div> <!-- Black -->
+                            <div class="p-card c5">♦</div> <!-- Red -->
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Bio + Interest Text + Internship Banner -->
+                    <div class="w-full md:w-2/3 text-slate-300 leading-relaxed space-y-4 flex flex-col h-full">
+                        <p>
+                            Hi there! I'm <strong>Keyi Chen</strong>, a passionate graduate student at Carnegie Mellon University majoring in Electrical and Computer Engineering.
+                        </p>
+                        <p>
+                            My academic and professional journey is driven by a deep fascination with <strong>Machine Learning</strong> and <strong>Computer Vision</strong>. I love exploring how algorithms can interpret the visual world and create generative art that bridges technology and creativity.
+                        </p>
+                        <p>
+                            When I'm not coding or training models, you can find me exploring new tech trends, participating in hackathons, or brainstorming my next project.
+                        </p>
+
+                        <!-- Interest Text MOVED HERE -->
+                        <p class="text-xs text-slate-400 leading-relaxed border-l-2 border-[#F2C94C] pl-4 italic">
+                            I also enjoy collecting <strong class="text-white">playing cards</strong>. Currently, I'm practicing cardistry to perform fancy cuts and shuffles!
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Internship Banner: DIRECT CHILD OF SECTION for Full Width -->
+                <div class="pt-8 w-full">
+                    <div class="internship-banner flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-[#F2C94C]/30 bg-[#F2C94C]/5 text-[#F2C94C] text-lg tracking-wide font-medium shadow-[0_0_15px_rgba(242,201,76,0.1)] hover:bg-[#F2C94C]/10 transition-colors cursor-default w-full text-center">
+                        <span class="material-symbols-outlined text-2xl">campaign</span>
+                        I am actively seeking internship in Summer 2026
+                    </div>
+                </div>
+            </section>
+
+            <!-- Education -->
+            <section class="glass-card p-8 md:p-10 rounded-3xl">
+                <div class="section-title"><span class="material-symbols-outlined text-[#F2C94C] text-3xl">school</span><h2 class="text-2xl font-serif-display text-white">Education</h2></div>
+                <div class="space-y-10">
+                    <div class="relative pl-6 border-l-2 border-[#F2C94C]">
+                        <div class="absolute -left-[9px] top-0 w-4 h-4 bg-[#F2C94C] rounded-full shadow-[0_0_10px_#F2C94C]"></div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2"><h3 class="text-l font-bold text-white">Carnegie Mellon University</h3><span class="text-[#F2C94C] text-xs font-mono bg-[#F2C94C]/10 px-3 py-1 rounded-full mt-1 md:mt-0 w-fit">Jan 2026 - May 2027</span></div>
+                        <p class="space-y-1 mb-4 text-slate-300 text-sm leading-relaxed">M.S. in Electrical and Computer Engineering</p>
+                    </div>
+                    <div class="relative pl-6 border-l-2 border-slate-700">
+                        <div class="absolute -left-[9px] top-0 w-4 h-4 bg-slate-700 rounded-full"></div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2"><h3 class="text-l font-bold text-white">University of California San Diego</h3><span class="text-slate-400 text-xs font-mono mt-1 md:mt-0">Aug 2021 - Dec 2025</span></div>
+                        <div class="space-y-1 mb-4 text-slate-300 text-sm leading-relaxed"><p>B.S. in Mathematics and Computer Science | <span class="text-[#F2C94C] font-semibold">Major GPA: 3.94/4.0</span></p><p>B.S. in Cognitive Science (ML &amp; Neural Computation) | <span class="text-[#F2C94C] font-semibold">Major GPA: 3.94/4.0</span></p><p class="text-slate-300 pt-1"><span class="text-[#F2C94C] font-bold">Graduated with Honors with High Distinction</span></p></div>
+                        <div class="flex flex-wrap gap-2"><span class="px-3 py-1 bg-slate-800/30 border border-slate-700 rounded-full text-xs text-slate-400">Deep Learning</span><span class="px-3 py-1 bg-slate-800/30 border border-slate-700 rounded-full text-xs text-slate-400">Machine Learning</span><span class="px-3 py-1 bg-slate-800/30 border border-slate-700 rounded-full text-xs text-slate-400">Optimization</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card p-8 md:p-10 rounded-3xl">
+                <div class="section-title"><span class="material-symbols-outlined text-[#F2C94C] text-3xl">work_history</span><h2 class="text-2xl font-serif-display text-white">Experience</h2></div>
+                <div class="space-y-12">
+                    <div class="group">
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2"><h3 class="text-l font-bold text-white group-hover:text-[#F2C94C] transition-colors">Amazon</h3><span class="text-sm font-mono text-slate-500">July 2024 - Nov 2024</span></div>
+                        <p class="text-lg text-[#F2C94C]/90 mb-4 font-medium">Applied Scientist Intern</p>
+                        <ul class="space-y-3 text-slate-300 text-sm leading-relaxed list-disc list-outside pl-5 marker:text-[#F2C94C]"><li>Designed automated pipelines to compare new models against DGL benchmarks, improving evaluation efficiency.</li><li>Streamlined large-scale model testing by leveraging <strong class="text-white">AWS Array Jobs</strong> with dynamic parameter assignment.</li><li>Optimized workflows by integrating runtime/accuracy tracking to eliminate redundant runs.</li></ul>
+                    </div>
+                    <div class="group">
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2"><h3 class="text-l font-bold text-white group-hover:text-[#F2C94C] transition-colors">Interactive Video Content Exploration</h3><span class="text-sm font-mono text-slate-500">July 2023 - Sep 2023</span></div>
+                        <p class="text-lg text-[#F2C94C]/90 mb-4 font-medium">Student Researcher<span class="text-slate-500 text-sm font-normal"> (Published in CHI '24)</span></p>
+                        <ul class="space-y-3 text-slate-300 text-sm leading-relaxed list-disc list-outside pl-5 marker:text-[#F2C94C]"><li>Built ML pipeline generating captions for video scenes; engineered <strong class="text-white">GPT-4</strong> prompts to rectify suboptimal captions.</li><li>Achieved <strong class="text-white">93.9%</strong> object detection accuracy and enhanced recall by 20%.</li><li>Co-authored research paper accepted by <strong class="text-white">CHI '24</strong>.</li></ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card p-8 md:p-10 rounded-3xl">
+                <div class="section-title"><span class="material-symbols-outlined text-[#F2C94C] text-3xl">rocket_launch</span><h2 class="text-2xl font-serif-display text-white">Selected Projects</h2></div>
+                <div class="grid gap-10">
+                    <div class="group relative pl-5 border-l border-slate-700 hover:border-[#F2C94C] transition-colors duration-300">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-2"><h3 class="text-g font-bold text-white group-hover:text-[#F2C94C] transition-colors cursor-default">Diffusion Models with Learned Anisotropic Covariance</h3><span class="text-xs font-mono text-slate-500 mt-1 md:mt-0 whitespace-nowrap">Jan 2025 - June 2025</span></div>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-3">Developed a 2D diffusion model with learned anisotropic covariance matrices in the reverse denoising process to address numerical instability in DDPM. Analyzed sampling strategies and visualized vector fields.</p>
+                    </div>
+                    <div class="group relative pl-5 border-l border-slate-700 hover:border-[#F2C94C] transition-colors duration-300">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-2"><a class="project-link text-g" href="https://github.com/ckychloe1756/Image-Inpainting" target="_blank">Image Inpainting <span class="material-symbols-outlined text-sm">open_in_new</span></a><span class="text-xs font-mono text-slate-500 mt-1 md:mt-0 whitespace-nowrap">March 2024</span></div>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-3">Engineered a robust encoder-decoder deep learning model with skip connections for 128x128 inpainting. Enhanced realism by integrating Adversarial Loss with L2 loss.</p>
+                    </div>
+                    <div class="group relative pl-5 border-l border-slate-700 hover:border-[#F2C94C] transition-colors duration-300">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-2"><h3 class="text-g font-bold text-white group-hover:text-[#F2C94C] transition-colors cursor-default">Image Classification Architectures</h3><span class="text-xs font-mono text-slate-500 mt-1 md:mt-0 whitespace-nowrap">March 2024</span></div>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-3">Implemented ResNet-10, DenseNet, and Vision Transformers using PyTorch. Achieved &gt;80% accuracy on CIFAR-10 through fine-tuning, data augmentation, and optimizer experiments.</p>
+                    </div>
+                    <div class="group relative pl-5 border-l border-slate-700 hover:border-[#F2C94C] transition-colors duration-300">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-2"><a class="project-link text-g" href="https://github.com/FishInAZ/Beer-Prediction" target="_blank">Beer Recommendation System <span class="material-symbols-outlined text-sm">open_in_new</span></a><span class="text-xs font-mono text-slate-500 mt-1 md:mt-0 whitespace-nowrap">Nov 2023</span></div>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-3">Implemented FPMC, PRME, MF, and Markov Chains to predict next purchase from sparse data. Achieved 79% accuracy (AUC). Performed extensive EDA on seasonal trends.</p>
+                    </div>
+                    <div class="group relative pl-5 border-l border-slate-700 hover:border-[#F2C94C] transition-colors duration-300">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-2"><a class="project-link text-g" href="https://github.com/ucsd-cse110-sp23/cse-110-project-team-5" target="_blank">SayIt Assistant <span class="material-symbols-outlined text-sm">open_in_new</span></a><span class="text-xs font-mono text-slate-500 mt-1 md:mt-0 whitespace-nowrap">March 2023 - June 2023</span></div>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-3">Developed a voice-activated assistant using ChatGPT/Whisper API. Implemented agile processes with JUnit and GitHub Actions. Built a Java Swing UI backed by MongoDB.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card p-8 md:p-10 rounded-3xl">
+                <div class="section-title"><span class="material-symbols-outlined text-[#F2C94C] text-3xl">code</span><h2 class="text-2xl font-serif-display text-white">Technical Skills</h2></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div><h4 class="text-xs font-bold text-[#F2C94C] uppercase mb-3 tracking-wider">Languages</h4><ul class="text-sm text-slate-300 space-y-2"><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Python</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Java</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>C/C++</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>SQL</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>R</li></ul></div>
+                    <div><h4 class="text-xs font-bold text-[#F2C94C] uppercase mb-3 tracking-wider">Libraries</h4><ul class="text-sm text-slate-300 space-y-2"><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>PyTorch</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>TensorFlow</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Pandas</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Scikit-learn</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Keras</li></ul></div>
+                    <div><h4 class="text-xs font-bold text-[#F2C94C] uppercase mb-3 tracking-wider">Web &amp; Viz</h4><ul class="text-sm text-slate-300 space-y-2"><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>HTML/CSS</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>OpenGL</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>OpenCV</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Matplotlib</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Seaborn</li></ul></div>
+                    <div><h4 class="text-xs font-bold text-[#F2C94C] uppercase mb-3 tracking-wider">Tools</h4><ul class="text-sm text-slate-300 space-y-2"><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Git</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>Docker</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>LaTeX</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>JUnit</li><li class="flex items-center gap-2"><span class="w-1 h-1 bg-slate-500 rounded-full"></span>MATLAB</li></ul></div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center py-12 text-slate-600 text-xs relative z-20 flex flex-col items-center gap-4"><p>© 2025 Keyi Chen. Designed with Physics &amp; WebGL.</p></footer>
+    </div>
+
+    <!-- LOGIC SCRIPTS -->
+    <script>
+        (() => {
+            const elements = {
+                body: document.body,
+                customCursor: document.getElementById('custom-cursor'),
+                warpFlash: document.getElementById('warp-flash'),
+                introOverlay: document.getElementById('intro-overlay'),
+                introContent: document.getElementById('intro-content'),
+                contentLayer: document.getElementById('content-layer'),
+                startButton: document.getElementById('startBtn'),
+                emailButton: document.getElementById('emailBtn'),
+                emailText: document.getElementById('emailText'),
+                scrambleTarget: document.getElementById('scramble-text'),
+                themeButtons: Array.from(document.querySelectorAll('.js-theme-toggle')),
+                bgCanvas: document.getElementById('bgCanvas'),
+                fgCanvas: document.getElementById('fgCanvas')
+            };
+
+            const canvases = {
+                background: elements.bgCanvas,
+                foreground: elements.fgCanvas,
+                mask: document.createElement('canvas')
+            };
+
+            const contexts = {
+                background: canvases.background.getContext('2d', { alpha: false }),
+                foreground: canvases.foreground.getContext('2d'),
+                mask: canvases.mask.getContext('2d')
+            };
+
+            const state = {
+                isNight: false,
+                isWarping: false,
+                canvasWidth: 0,
+                canvasHeight: 0,
+                dpr: window.devicePixelRatio || 1,
+                pointer: { x: -9999, y: -9999, active: false, timer: null },
+                cursor: { x: -100, y: -100, followX: -100, followY: -100, dragging: false, lastX: 0, lastY: 0 },
+                particles: [],
+                stars: [],
+                backgroundStars: [],
+                meteors: [],
+                asciiGrid: [],
+                asciiChars: '.,:;*+o%@',
+                time: 0,
+                nightSceneBuffer: null
+            };
+
+            class AudioEngine {
+                constructor() {
+                    this.ctx = null;
+                    this.master = null;
+                    this.notes = [196.0, 261.63, 293.66, 329.63, 392.0, 523.25];
+                }
+                async init() {
+                    const AudioCtor = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioCtor();
+                    if (this.ctx.state === 'suspended') await this.ctx.resume();
+                    this.master = this.ctx.createGain();
+                    this.master.gain.value = 0.3;
+                    this.master.connect(this.ctx.destination);
+                }
+                playChime() {
+                    if (!this.ctx) return;
+                    const startTime = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const freq = this.notes[Math.floor(Math.random() * this.notes.length)];
+                    osc.frequency.value = freq;
+                    osc.type = 'sine';
+                    const gain = this.ctx.createGain();
+                    gain.gain.setValueAtTime(0, startTime);
+                    gain.gain.linearRampToValueAtTime(0.1, startTime + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + 3.0);
+                    const pan = this.ctx.createStereoPanner();
+                    pan.pan.value = Math.random() * 1.6 - 0.8;
+                    osc.connect(gain).connect(pan).connect(this.master);
+                    osc.start(startTime);
+                    osc.stop(startTime + 3.1);
+                }
+            }
+
+            const audio = new AudioEngine();
+
+            const Simplex = (() => {
+                const p = new Uint8Array(256);
+                for (let i = 0; i < 256; i++) p[i] = Math.floor(Math.random() * 256);
+                const perm = new Uint8Array(512);
+                const permMod12 = new Uint8Array(512);
+                for (let i = 0; i < 512; i++) {
+                    perm[i] = p[i & 255];
+                    permMod12[i] = perm[i] % 12;
+                }
+                const grad3 = new Float32Array([
+                    1, 1, 0, -1, 1, 0, 1, -1, 0, -1, -1, 0,
+                    1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, -1,
+                    0, 1, 1, 0, -1, 1, 0, 1, -1, 0, -1, -1
+                ]);
+                const F3 = 1 / 3;
+                const G3 = 1 / 6;
+                const dot = (gradIndex, x, y, z) => {
+                    const offset = permMod12[gradIndex] * 3;
+                    return grad3[offset] * x + grad3[offset + 1] * y + grad3[offset + 2] * z;
+                };
+                return {
+                    noise2D(x, y) {
+                        return this.noise3D(x, y, 0);
+                    },
+                    noise3D(xin, yin, zin) {
+                        let n0, n1, n2, n3;
+                        const s = (xin + yin + zin) * F3;
+                        const i = Math.floor(xin + s);
+                        const j = Math.floor(yin + s);
+                        const k = Math.floor(zin + s);
+                        const t = (i + j + k) * G3;
+                        const X0 = i - t;
+                        const Y0 = j - t;
+                        const Z0 = k - t;
+                        const x0 = xin - X0;
+                        const y0 = yin - Y0;
+                        const z0 = zin - Z0;
+                        let i1, j1, k1, i2, j2, k2;
+                        if (x0 >= y0) {
+                            if (y0 >= z0) {
+                                i1 = 1; j1 = 0; k1 = 0;
+                                i2 = 1; j2 = 1; k2 = 0;
+                            } else if (x0 >= z0) {
+                                i1 = 1; j1 = 0; k1 = 0;
+                                i2 = 1; j2 = 0; k2 = 1;
+                            } else {
+                                i1 = 0; j1 = 0; k1 = 1;
+                                i2 = 1; j2 = 0; k2 = 1;
+                            }
+                        } else if (y0 < z0) {
+                            i1 = 0; j1 = 0; k1 = 1;
+                            i2 = 0; j2 = 1; k2 = 1;
+                        } else if (x0 < z0) {
+                            i1 = 0; j1 = 1; k1 = 0;
+                            i2 = 0; j2 = 1; k2 = 1;
+                        } else {
+                            i1 = 0; j1 = 1; k1 = 0;
+                            i2 = 1; j2 = 1; k2 = 0;
+                        }
+                        const x1 = x0 - i1 + G3;
+                        const y1 = y0 - j1 + G3;
+                        const z1 = z0 - k1 + G3;
+                        const x2 = x0 - i2 + 2 * G3;
+                        const y2 = y0 - j2 + 2 * G3;
+                        const z2 = z0 - k2 + 2 * G3;
+                        const x3 = x0 - 1 + 3 * G3;
+                        const y3 = y0 - 1 + 3 * G3;
+                        const z3 = z0 - 1 + 3 * G3;
+                        const ii = i & 255;
+                        const jj = j & 255;
+                        const kk = k & 255;
+                        const t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
+                        n0 = t0 < 0 ? 0 : Math.pow(t0, 4) * dot(ii + perm[jj + perm[kk]], x0, y0, z0);
+                        const t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
+                        n1 = t1 < 0 ? 0 : Math.pow(t1, 4) * dot(ii + i1 + perm[jj + j1 + perm[kk + k1]], x1, y1, z1);
+                        const t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
+                        n2 = t2 < 0 ? 0 : Math.pow(t2, 4) * dot(ii + i2 + perm[jj + j2 + perm[kk + k2]], x2, y2, z2);
+                        const t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
+                        n3 = t3 < 0 ? 0 : Math.pow(t3, 4) * dot(ii + 1 + perm[jj + 1 + perm[kk + 1]], x3, y3, z3);
+                        return 32 * (n0 + n1 + n2 + n3);
+                    }
+                };
+            })();
+
+            class AsciiMobius {
+                constructor() {
+                    this.points = [];
+                }
+                init() {
+                    this.points = [];
+                    const count = 3000;
+                    const R = 320 * state.dpr;
+                    const width = 50 * state.dpr;
+                    const depth = 15 * state.dpr;
+                    const symbols = ['∞', '8', '*', '+', '·', 'o', '~', '•'];
+                    for (let i = 0; i < count; i++) {
+                        const u = Math.random() * Math.PI * 2;
+                        const v = Math.random() * 2 - 1;
+                        const t = Math.random() * 2 - 1;
+                        this.points.push({
+                            u,
+                            v,
+                            t,
+                            R,
+                            width,
+                            depth,
+                            char: symbols[Math.floor(Math.random() * symbols.length)]
+                        });
+                    }
+                }
+                draw(ctx, time) {
+                    if (!this.points.length) this.init();
+                    const cx = state.canvasWidth / 2;
+                    const cy = state.canvasHeight * 0.5;
+                    const rotX = time * 0.004;
+                    const rotY = time * 0.009;
+                    ctx.font = `bold ${16 * state.dpr}px 'Press Start 2P'`;
+                    ctx.textAlign = 'center';
+                    this.points.forEach(point => {
+                        const u2 = point.u / 2;
+                        const radial = point.width * point.v * Math.cos(u2) - point.depth * point.t * Math.sin(u2);
+                        const zDisp = point.width * point.v * Math.sin(u2) + point.depth * point.t * Math.cos(u2);
+                        const D = point.R + radial;
+                        let x = D * Math.cos(point.u);
+                        let y = D * Math.sin(2 * point.u) * 0.5;
+                        let z = zDisp;
+                        let x1 = x * Math.cos(rotY) + z * Math.sin(rotY);
+                        let z1 = -x * Math.sin(rotY) + z * Math.cos(rotY);
+                        let y1 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
+                        let z2 = y * Math.sin(rotX) + z1 * Math.cos(rotX);
+                        const scale = 800 / (800 + z2);
+                        const sx = cx + x1 * scale;
+                        const sy = cy + y1 * scale;
+                        const alpha = (z2 + 400) / 800;
+                        if (alpha <= 0.1) return;
+                        ctx.fillStyle = `rgba(80, 160, 230, ${Math.max(0.2, Math.min(alpha, 1))})`;
+                        ctx.fillText(point.char, sx, sy);
+                    });
+                }
+            }
+
+            class IntroShape {
+                constructor() {
+                    this.points = [];
+                }
+                init() {
+                    this.points = [];
+                    const count = 400;
+                    for (let i = 0; i < count; i++) {
+                        const theta = Math.random() * Math.PI * 2;
+                        const phi = Math.acos(2 * Math.random() - 1);
+                        const radius = 180;
+                        this.points.push({
+                            theta,
+                            phi,
+                            baseR: radius,
+                            offset: Math.random() * 100
+                        });
+                    }
+                }
+                draw(ctx, time) {
+                    if (!this.points.length) this.init();
+                    const cx = state.canvasWidth / 2;
+                    const cy = state.canvasHeight * 0.45;
+                    const rotX = time * 0.003;
+                    const rotY = time * 0.005;
+                    ctx.globalAlpha = 0.15;
+                    ctx.strokeStyle = state.isNight ? 'rgba(242, 201, 76, 0.3)' : 'rgba(30, 41, 59, 0.2)';
+                    ctx.beginPath();
+                    this.points.forEach(point => {
+                        const morph = Math.sin(time * 0.02 + point.offset) * 30;
+                        const currentR = point.baseR + morph;
+                        let x = currentR * Math.sin(point.phi) * Math.cos(point.theta);
+                        let y = currentR * Math.sin(point.phi) * Math.sin(point.theta);
+                        let z = currentR * Math.cos(point.phi);
+                        let y1 = y * Math.cos(rotX) - z * Math.sin(rotX);
+                        let z1 = y * Math.sin(rotX) + z * Math.cos(rotX);
+                        let x1 = x * Math.cos(rotY) + z1 * Math.sin(rotY);
+                        let z2 = -x * Math.sin(rotY) + z1 * Math.cos(rotY);
+                        const scale = 800 / (800 + z2);
+                        const sx = cx + x1 * scale * state.dpr;
+                        const sy = cy + y1 * scale * state.dpr;
+                        ctx.moveTo(sx, sy);
+                        ctx.lineTo(sx + 2, sy);
+                    });
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                }
+            }
+
+            class Meteor {
+                constructor() {
+                    this.reset();
+                }
+                reset() {
+                    if (Math.random() < 0.5) {
+                        this.x = Math.random() * state.canvasWidth;
+                        this.y = -100;
+                    } else {
+                        this.x = state.canvasWidth + 100;
+                        this.y = Math.random() * state.canvasHeight * 0.5;
+                    }
+                    const speed = (Math.random() * 12 + 10) * state.dpr;
+                    const angle = Math.PI * 0.75 + (Math.random() - 0.5) * 0.15;
+                    this.vx = Math.cos(angle) * speed;
+                    this.vy = Math.sin(angle) * speed;
+                    this.length = (Math.random() * 200 + 150) * state.dpr;
+                    this.size = (Math.random() * 2 + 1) * state.dpr;
+                }
+                update() {
+                    if (state.isWarping) {
+                        const centerX = state.canvasWidth / 2;
+                        const centerY = state.canvasHeight / 2;
+                        this.x += (this.x - centerX) * 0.1;
+                        this.y += (this.y - centerY) * 0.1;
+                        return true;
+                    }
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    return !(this.x < -this.length || this.y > state.canvasHeight + this.length);
+                }
+                draw(ctx) {
+                    const gradient = ctx.createLinearGradient(
+                        this.x,
+                        this.y,
+                        this.x - this.vx * 0.5,
+                        this.y - this.vy * 0.5
+                    );
+                    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = this.size;
+                    ctx.lineCap = 'round';
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y);
+                    ctx.lineTo(this.x - this.vx * (this.length / 25), this.y - this.vy * (this.length / 25));
+                    ctx.stroke();
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = 'white';
+                    ctx.fillStyle = 'white';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 0.8, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            class Particle {
+                constructor() {
+                    this.reset(true);
+                }
+                reset(randomY = false) {
+                    this.x = Math.random() * state.canvasWidth;
+                    this.y = randomY ? Math.random() * state.canvasHeight : Math.random() * state.canvasHeight;
+                    const angle = Math.random() * Math.PI * 2;
+                    const r = Math.random();
+                    if (r < 0.02) {
+                        this.color = `hsla(${45 + Math.random() * 10}, 90%, 60%,`;
+                        this.baseSpeed = 0.8;
+                        this.size = 1.5 * state.dpr;
+                    } else if (r < 0.15) {
+                        this.color = `hsla(${200 + Math.random() * 20}, 60%, 40%,`;
+                        this.baseSpeed = 0.6;
+                        this.size = 1.2 * state.dpr;
+                    } else {
+                        this.color = `hsla(${220 + Math.random() * 20}, 50%, ${10 + Math.random() * 10}%,`;
+                        this.baseSpeed = 0.4;
+                        this.size = 0.9 * state.dpr;
+                    }
+                    const driftSpeed = this.baseSpeed * 0.3;
+                    this.vx = Math.cos(angle) * driftSpeed;
+                    this.vy = Math.sin(angle) * driftSpeed;
+                    this.pushX = 0;
+                    this.pushY = 0;
+                    this.life = Math.random() * 200 + 100;
+                    this.age = 0;
+                }
+                update() {
+                    if (state.isWarping) {
+                        const centerX = state.canvasWidth / 2;
+                        const centerY = state.canvasHeight / 2;
+                        const angle = Math.atan2(this.y - centerY, this.x - centerX);
+                        const speed = 30 * state.dpr;
+                        this.x += Math.cos(angle) * speed;
+                        this.y += Math.sin(angle) * speed;
+                        return;
+                    }
+                    if (state.pointer.active && state.isNight) {
+                        const dx = this.x - state.pointer.x;
+                        const dy = this.y - state.pointer.y;
+                        const radius = 250 * state.dpr;
+                        const distSq = dx * dx + dy * dy;
+                        if (distSq < radius * radius) {
+                            const force = (1 - distSq / (radius * radius)) * 0.05;
+                            const angle = Math.atan2(dy, dx);
+                            this.pushX += Math.cos(angle) * force;
+                            this.pushY += Math.sin(angle) * force;
+                        }
+                    }
+                    this.pushX *= 0.95;
+                    this.pushY *= 0.95;
+                    this.x += this.vx * state.dpr + this.pushX * this.baseSpeed * state.dpr * 2;
+                    this.y += this.vy * state.dpr + this.pushY * this.baseSpeed * state.dpr * 2;
+                    if (this.x < -50) this.x = state.canvasWidth + 50;
+                    if (this.x > state.canvasWidth + 50) this.x = -50;
+                    if (this.y < -50) this.y = state.canvasHeight + 50;
+                    if (this.y > state.canvasHeight + 50) this.y = -50;
+                    this.age++;
+                    if (this.age > this.life) this.reset();
+                }
+                draw(ctx) {
+                    if (state.isWarping) {
+                        ctx.strokeStyle = `${this.color}0.8)`;
+                        ctx.lineWidth = this.size;
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, this.y);
+                        const centerX = state.canvasWidth / 2;
+                        const centerY = state.canvasHeight / 2;
+                        const angle = Math.atan2(this.y - centerY, this.x - centerX);
+                        ctx.lineTo(
+                            this.x - Math.cos(angle) * 50 * state.dpr,
+                            this.y - Math.sin(angle) * 50 * state.dpr
+                        );
+                        ctx.stroke();
+                        return;
+                    }
+                    const alpha = Math.min(1, (this.life - this.age) / 30) * 0.85;
+                    ctx.fillStyle = `${this.color}${alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 0.8, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            class Star {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.maxRadius = 22 * state.dpr;
+                    this.radius = 1 * state.dpr;
+                    this.life = 1;
+                    this.hue = 45 + Math.random() * 10;
+                    this.growing = true;
+                }
+                update() {
+                    if (this.growing) {
+                        this.radius += 1.5 * state.dpr;
+                        if (this.radius >= this.maxRadius) this.growing = false;
+                    } else {
+                        this.radius *= 0.96;
+                        this.life -= 0.01;
+                    }
+                    return this.life > 0 && this.radius > 0.5;
+                }
+                draw(ctx) {
+                    const gradient = ctx.createRadialGradient(
+                        this.x,
+                        this.y,
+                        0,
+                        this.x,
+                        this.y,
+                        this.radius * 2
+                    );
+                    gradient.addColorStop(0, `hsla(${this.hue}, 90%, 60%, ${this.life * 0.7})`);
+                    gradient.addColorStop(1, `hsla(${this.hue}, 100%, 50%, 0)`);
+                    ctx.globalCompositeOperation = 'screen';
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius * 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.globalCompositeOperation = 'source-over';
+                }
+            }
+
+            class StaticStar {
+                constructor() {
+                    this.x = Math.random() * state.canvasWidth;
+                    this.y = Math.random() * state.canvasHeight;
+                    this.size = (Math.random() * 1.2 + 0.8) * state.dpr;
+                    if (Math.random() < 0.3) {
+                        this.isTwinkle = true;
+                        this.hue = 210;
+                        this.saturation = '100%';
+                        this.lightness = '85%';
+                        this.baseAlpha = Math.random() * 0.5 + 0.5;
+                        this.phase = Math.random() * Math.PI * 2;
+                        this.twinkleSpeed = Math.random() * 0.05 + 0.03;
+                    } else {
+                        this.isTwinkle = false;
+                        this.hue = 0;
+                        this.saturation = '0%';
+                        this.lightness = '100%';
+                        this.baseAlpha = Math.random() * 0.4 + 0.2;
+                        this.phase = 0;
+                        this.twinkleSpeed = 0;
+                    }
+                }
+                draw(ctx) {
+                    if (!state.isNight) return;
+                    let alpha = this.baseAlpha;
+                    if (this.isTwinkle) {
+                        this.phase += this.twinkleSpeed;
+                        alpha += Math.sin(this.phase) * 0.3;
+                    }
+                    alpha = Math.min(1, Math.max(0, alpha));
+                    if (alpha <= 0) return;
+                    ctx.fillStyle = `hsla(${this.hue}, ${this.saturation}, ${this.lightness}, ${alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            const asciiMobius = new AsciiMobius();
+            const introShape = new IntroShape();
+
+            const textScrambler = elements.scrambleTarget ? new (class TextScramble {
+                constructor(el) {
+                    this.el = el;
+                    this.chars = '!<>-_\\/[]{}—=+*^?#________';
+                    this.update = this.update.bind(this);
+                    this.queue = [];
+                    this.frame = 0;
+                    this.frameRequest = null;
+                    this.resolve = null;
+                }
+                setText(newText) {
+                    const oldText = this.el.innerText;
+                    const length = Math.max(oldText.length, newText.length);
+                    const promise = new Promise(resolve => {
+                        this.resolve = resolve;
+                    });
+                    this.queue = [];
+                    for (let i = 0; i < length; i++) {
+                        const from = oldText[i] || '';
+                        const to = newText[i] || '';
+                        const start = Math.floor(Math.random() * 40);
+                        const end = start + Math.floor(Math.random() * 40);
+                        this.queue.push({ from, to, start, end });
+                    }
+                    cancelAnimationFrame(this.frameRequest);
+                    this.frame = 0;
+                    this.update();
+                    return promise;
+                }
+                update() {
+                    let output = '';
+                    let complete = 0;
+                    for (let i = 0; i < this.queue.length; i++) {
+                        const queueItem = this.queue[i];
+                        const { from, to, start, end } = queueItem;
+                        if (this.frame >= end) {
+                            complete++;
+                            output += to;
+                        } else if (this.frame >= start) {
+                            if (!queueItem.char || Math.random() < 0.28) {
+                                queueItem.char = this.randomChar();
+                            }
+                            output += `<span class="dud">${queueItem.char}</span>`;
+                        } else {
+                            output += from;
+                        }
+                    }
+                    this.el.innerHTML = output;
+                    if (complete === this.queue.length) {
+                        this.resolve && this.resolve();
+                    } else {
+                        this.frameRequest = requestAnimationFrame(this.update);
+                        this.frame++;
+                    }
+                }
+                randomChar() {
+                    return this.chars[Math.floor(Math.random() * this.chars.length)];
+                }
+            })(elements.scrambleTarget) : null;
+
+            function initAsciiGrid() {
+                const cellSize = 16 * state.dpr;
+                const columns = Math.ceil(state.canvasWidth / cellSize);
+                const rows = Math.ceil(state.canvasHeight / cellSize);
+                state.asciiGrid = [];
+                for (let y = 0; y < rows; y++) {
+                    for (let x = 0; x < columns; x++) {
+                        state.asciiGrid.push({
+                            x: x * cellSize,
+                            y: y * cellSize,
+                            baseNoise: Math.random() * 100
+                        });
+                    }
+                }
+            }
+
+            function initializeParticles() {
+                const count = Math.min(4000, Math.floor((state.canvasWidth * state.canvasHeight) / 800));
+                state.particles = Array.from({ length: count }, () => new Particle());
+            }
+
+            function initializeBackgroundStars() {
+                state.backgroundStars = Array.from({ length: 350 }, () => new StaticStar());
+            }
+
+            function initializeGeometry() {
+                asciiMobius.init();
+                introShape.init();
+            }
+
+            function resizeCanvas() {
+                state.dpr = window.devicePixelRatio || 1;
+                state.canvasWidth = window.innerWidth * state.dpr;
+                state.canvasHeight = window.innerHeight * state.dpr;
+                if (!state.canvasWidth || !state.canvasHeight) return;
+                [canvases.background, canvases.foreground, canvases.mask].forEach(canvas => {
+                    canvas.width = state.canvasWidth;
+                    canvas.height = state.canvasHeight;
+                    canvas.style.width = `${window.innerWidth}px`;
+                    canvas.style.height = `${window.innerHeight}px`;
+                });
+                initializeParticles();
+                initializeBackgroundStars();
+                state.meteors = [];
+                state.stars = [];
+                initAsciiGrid();
+                initializeGeometry();
+                state.nightSceneBuffer = document.createElement('canvas');
+                state.nightSceneBuffer.width = state.canvasWidth;
+                state.nightSceneBuffer.height = state.canvasHeight;
+                drawMountains();
+                drawInitialNightScene();
+            }
+
+            function drawInitialNightScene() {
+                if (!state.nightSceneBuffer) return;
+                const bufferCtx = state.nightSceneBuffer.getContext('2d');
+                bufferCtx.fillStyle = '#020617';
+                bufferCtx.fillRect(0, 0, state.canvasWidth, state.canvasHeight);
+                state.backgroundStars.forEach(star => star.draw(bufferCtx));
+            }
+
+            function drawMountains() {
+                const ctx = contexts.foreground;
+                if (!ctx) return;
+                ctx.clearRect(0, 0, state.canvasWidth, state.canvasHeight);
+                if (!state.isNight) return;
+                const mx = state.canvasWidth * 0.85;
+                const my = state.canvasHeight * 0.12;
+                const radius = Math.min(50 * state.dpr, state.canvasWidth * 0.1);
+                ctx.save();
+                const glow = ctx.createRadialGradient(mx, my, radius, mx, my, radius * 6);
+                glow.addColorStop(0, 'rgba(242, 201, 76, 0.15)');
+                glow.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = glow;
+                ctx.beginPath();
+                ctx.arc(mx, my, radius * 6, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowColor = '#F2994A';
+                ctx.shadowBlur = 30;
+                ctx.fillStyle = '#F2C94C';
+                ctx.beginPath();
+                ctx.arc(mx, my, radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(mx - radius * 0.25, my - radius * 0.25, radius * 0.93, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.restore();
+                const horizon = state.canvasHeight * 0.88;
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.5)';
+                ctx.beginPath();
+                ctx.moveTo(0, state.canvasHeight);
+                for (let x = 0; x <= state.canvasWidth; x += 10) {
+                    const noise = Simplex.noise2D(x * 0.0015, 0) * 60 * state.dpr;
+                    ctx.lineTo(x, horizon - noise);
+                }
+                ctx.lineTo(state.canvasWidth, state.canvasHeight);
+                ctx.fill();
+                const gradient = ctx.createLinearGradient(0, state.canvasHeight * 0.7, 0, state.canvasHeight);
+                gradient.addColorStop(0, '#020617');
+                gradient.addColorStop(1, '#0f172a');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.moveTo(0, state.canvasHeight);
+                for (let x = 0; x <= state.canvasWidth; x += 10) {
+                    const noise = Simplex.noise2D(x * 0.0025, 100) * 40 * state.dpr;
+                    ctx.lineTo(x, horizon + 30 * state.dpr - noise);
+                }
+                ctx.lineTo(state.canvasWidth, state.canvasHeight);
+                ctx.fill();
+                ctx.fillStyle = '#000205';
+                ctx.beginPath();
+                const towerX = state.canvasWidth * 0.12;
+                const towerWidth = state.canvasWidth * 0.1;
+                ctx.moveTo(towerX, state.canvasHeight + 10);
+                let currentY = state.canvasHeight;
+                while (currentY > state.canvasHeight * 0.18) {
+                    currentY -= 8;
+                    const progress = (state.canvasHeight - currentY) / state.canvasHeight;
+                    const wave = Simplex.noise2D(currentY * 0.008, 0) * 15 * state.dpr;
+                    const width = towerWidth * (1 - progress) * 0.7;
+                    ctx.lineTo(towerX - width + wave, currentY);
+                }
+                ctx.lineTo(towerX, state.canvasHeight * 0.15);
+                while (currentY < state.canvasHeight) {
+                    currentY += 8;
+                    const progress = (state.canvasHeight - currentY) / state.canvasHeight;
+                    const wave = Simplex.noise2D(currentY * 0.008, 200) * 15 * state.dpr;
+                    const width = towerWidth * (1 - progress) * 0.7;
+                    ctx.lineTo(towerX + width + wave, currentY);
+                }
+                ctx.fill();
+            }
+
+            function isIntroVisible() {
+                if (!elements.introOverlay) return false;
+                const style = window.getComputedStyle(elements.introOverlay);
+                return style.display !== 'none' && parseFloat(style.opacity || '1') !== 0;
+            }
+
+            function renderNightScene(ctx) {
+                ctx.fillStyle = state.isWarping ? 'rgba(0,0,0,0.1)' : 'rgba(2, 6, 23, 0.25)';
+                ctx.fillRect(0, 0, state.canvasWidth, state.canvasHeight);
+                if (Math.random() < 0.003) state.meteors.push(new Meteor());
+                state.backgroundStars.forEach(star => star.draw(ctx));
+                state.particles.forEach(particle => {
+                    particle.update();
+                    particle.draw(ctx);
+                });
+                if (!state.isWarping && state.cursor.dragging) {
+                    const dx = state.cursor.x - state.cursor.lastX;
+                    const dy = state.cursor.y - state.cursor.lastY;
+                    const distance = Math.hypot(dx, dy);
+                    if (distance < 5) {
+                        state.stars.push(new Star(state.cursor.x * state.dpr, state.cursor.y * state.dpr));
+                    } else {
+                        const steps = Math.ceil(distance / 5);
+                        for (let i = 0; i < steps; i++) {
+                            const t = i / steps;
+                            const starX = (state.cursor.lastX + dx * t) * state.dpr;
+                            const starY = (state.cursor.lastY + dy * t) * state.dpr;
+                            state.stars.push(new Star(starX, starY));
+                        }
+                    }
+                }
+                state.cursor.lastX = state.cursor.x;
+                state.cursor.lastY = state.cursor.y;
+                state.stars = state.stars.filter(star => {
+                    const alive = star.update();
+                    if (alive) star.draw(ctx);
+                    return alive;
+                });
+                state.meteors = state.meteors.filter(meteor => {
+                    const alive = meteor.update();
+                    if (alive) meteor.draw(ctx);
+                    return alive;
+                });
+            }
+
+            function renderDayScene(ctx) {
+                if (state.isWarping) {
+                    ctx.fillStyle = '#f8fafc';
+                    ctx.fillRect(0, 0, state.canvasWidth, state.canvasHeight);
+                    return;
+                }
+                ctx.fillStyle = '#f2f2f2';
+                ctx.fillRect(0, 0, state.canvasWidth, state.canvasHeight);
+                ctx.font = `bold ${10 * state.dpr}px 'Space Mono'`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                if (!isIntroVisible() && state.asciiGrid.length) {
+                    const t = state.time * 0.001;
+                    state.asciiGrid.forEach(cell => {
+                        let value = Simplex.noise3D(cell.x * 0.002, cell.y * 0.002, t) * 0.5 + 0.5;
+                        if (state.pointer.active) {
+                            const dx = cell.x - state.pointer.x;
+                            const dy = cell.y - state.pointer.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            if (distance < 200 * state.dpr) {
+                                value += (1 - distance / (200 * state.dpr)) * 0.8;
+                            }
+                        }
+                        const index = Math.floor(value * (state.asciiChars.length - 1));
+                        const char = state.asciiChars[Math.max(0, Math.min(index, state.asciiChars.length - 1))];
+                        if (char === '.') return;
+                        ctx.fillStyle = value > 0.6 ? '#e63946' : '#ffb3b3';
+                        ctx.fillText(char, cell.x, cell.y);
+                    });
+                }
+            }
+
+            function renderIntro(ctx) {
+                if (!isIntroVisible()) return;
+                if (state.isNight) {
+                    introShape.draw(ctx, state.time);
+                } else {
+                    asciiMobius.draw(ctx, state.time);
+                }
+            }
+
+            function animate() {
+                if (!state.canvasWidth || !state.canvasHeight) {
+                    requestAnimationFrame(animate);
+                    return;
+                }
+                if (state.isNight) {
+                    renderNightScene(contexts.background);
+                } else {
+                    renderDayScene(contexts.background);
+                }
+                renderIntro(contexts.background);
+                state.time += 1;
+                requestAnimationFrame(animate);
+            }
+
+            function setCursorHover(isHovering) {
+                if (!elements.customCursor) return;
+                elements.customCursor.classList[isHovering ? 'add' : 'remove']('hovering');
+            }
+
+            function handleMagneticButton(clientX, clientY) {
+                const button = document.querySelector('.magnetic-btn');
+                if (!button) return;
+                const rect = button.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const distance = Math.hypot(clientX - centerX, clientY - centerY);
+                const threshold = 100;
+                if (distance < threshold) {
+                    const pull = 0.4;
+                    const dx = (clientX - centerX) * pull;
+                    const dy = (clientY - centerY) * pull;
+                    button.style.transform = `translate(${dx}px, ${dy}px)`;
+                } else {
+                    button.style.transform = 'translate(0, 0)';
+                }
+            }
+
+            function handlePointerMove(clientX, clientY) {
+                state.cursor.x = clientX;
+                state.cursor.y = clientY;
+                if (elements.customCursor) {
+                    elements.customCursor.style.transform = `translate(${clientX}px, ${clientY}px)`;
+                }
+                const scaledX = clientX * state.dpr;
+                const scaledY = clientY * state.dpr;
+                state.pointer.x = scaledX;
+                state.pointer.y = scaledY;
+                state.pointer.active = true;
+                if (state.pointer.timer) clearTimeout(state.pointer.timer);
+                state.pointer.timer = window.setTimeout(() => {
+                    state.pointer.active = false;
+                }, 100);
+                handleMagneticButton(clientX, clientY);
+            }
+
+            function handlePointerDown(clientX, clientY) {
+                state.cursor.dragging = true;
+                state.cursor.lastX = clientX;
+                state.cursor.lastY = clientY;
+                if (state.isNight && !state.isWarping) {
+                    state.stars.push(new Star(clientX * state.dpr, clientY * state.dpr));
+                    audio.playChime();
+                }
+                handlePointerMove(clientX, clientY);
+            }
+
+            function handlePointerUp() {
+                state.cursor.dragging = false;
+            }
+
+            function updateCursorFollower() {
+                state.cursor.followX += (state.cursor.x - state.cursor.followX) * 0.2;
+                state.cursor.followY += (state.cursor.y - state.cursor.followY) * 0.2;
+                if (elements.customCursor) {
+                    elements.customCursor.style.transform = `translate(${state.cursor.followX}px, ${state.cursor.followY}px)`;
+                }
+                requestAnimationFrame(updateCursorFollower);
+            }
+
+            function updateCardSuits() {
+                const c2 = document.querySelector('.c2');
+                const c3 = document.querySelector('.c3');
+                const c4 = document.querySelector('.c4');
+                const c5 = document.querySelector('.c5');
+                if (!c2 || !c3 || !c4 || !c5) return;
+                if (state.isNight) {
+                    c2.textContent = '♥';
+                    c3.textContent = '♣';
+                    c4.textContent = '♦';
+                    c5.textContent = '♠';
+                } else {
+                    c2.textContent = '♠';
+                    c3.textContent = '♥';
+                    c4.textContent = '♣';
+                    c5.textContent = '♦';
+                }
+            }
+
+            function setThemeIcon(name) {
+                elements.themeButtons.forEach(button => {
+                    const icon = button.querySelector('span');
+                    if (icon) icon.textContent = name;
+                });
+            }
+
+            function toggleTheme() {
+                state.isNight = !state.isNight;
+                elements.body.classList.toggle('day-mode');
+                setThemeIcon(state.isNight ? 'dark_mode' : 'light_mode');
+                drawMountains();
+                updateCardSuits();
+            }
+
+            function registerThemeToggles() {
+                elements.themeButtons.forEach(button => {
+                    button.addEventListener('click', toggleTheme);
+                });
+            }
+
+            async function startExperience() {
+                await audio.init();
+                if (state.isNight) {
+                    elements.introOverlay.classList.add('fade-out');
+                    window.setTimeout(() => {
+                        elements.introOverlay.style.display = 'none';
+                        elements.contentLayer.classList.add('fade-in-active');
+                    }, 800);
+                    return;
+                }
+                state.isWarping = true;
+                if (elements.introContent) elements.introContent.classList.add('warp-out-active');
+                window.setTimeout(() => {
+                    elements.warpFlash.classList.add('active');
+                    window.setTimeout(() => {
+                        elements.introOverlay.style.display = 'none';
+                        elements.contentLayer.classList.add('fade-in-active');
+                        state.isWarping = false;
+                        elements.warpFlash.classList.remove('active');
+                    }, 400);
+                }, 600);
+            }
+
+            function copyEmailToClipboard() {
+                if (!elements.emailButton || !elements.emailText) return;
+                elements.emailButton.addEventListener('click', event => {
+                    event.preventDefault();
+                    const textarea = document.createElement('textarea');
+                    textarea.value = 'keyichen@andrew.cmu.edu';
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    const original = elements.emailText.textContent;
+                    elements.emailText.textContent = 'Copied!';
+                    elements.emailButton.classList.add('text-[#F2C94C]');
+                    window.setTimeout(() => {
+                        elements.emailText.textContent = original;
+                        elements.emailButton.classList.remove('text-[#F2C94C]');
+                    }, 2000);
+                });
+            }
+
+            function registerHoverEffects() {
+                document.addEventListener('mouseover', event => {
+                    const target = event.target.closest(
+                        'a, button, .project-link, .card-fan, .internship-banner, .js-theme-toggle, .group h3'
+                    );
+                    if (target) setCursorHover(true);
+                });
+                document.addEventListener('mouseout', event => {
+                    const target = event.target.closest(
+                        'a, button, .project-link, .card-fan, .internship-banner, .js-theme-toggle, .group h3'
+                    );
+                    if (target) setCursorHover(false);
+                });
+            }
+
+            function registerPointerEvents() {
+                window.addEventListener('mousemove', event => handlePointerMove(event.clientX, event.clientY));
+                window.addEventListener('touchmove', event => {
+                    if (!event.touches.length) return;
+                    handlePointerMove(event.touches[0].clientX, event.touches[0].clientY);
+                }, { passive: true });
+                window.addEventListener('mousedown', event => handlePointerDown(event.clientX, event.clientY));
+                window.addEventListener('touchstart', event => {
+                    if (!event.touches.length) return;
+                    handlePointerDown(event.touches[0].clientX, event.touches[0].clientY);
+                }, { passive: true });
+                window.addEventListener('mouseup', handlePointerUp);
+                window.addEventListener('touchend', handlePointerUp);
+            }
+
+            function startScramble() {
+                if (!textScrambler) return;
+                window.setTimeout(() => {
+                    textScrambler.setText('Keyi Chen');
+                }, 500);
+            }
+
+            function registerEventListeners() {
+                registerThemeToggles();
+                registerHoverEffects();
+                registerPointerEvents();
+                window.addEventListener('resize', resizeCanvas);
+                if (elements.startButton) elements.startButton.addEventListener('click', startExperience);
+                copyEmailToClipboard();
+            }
+
+            function initialize() {
+                resizeCanvas();
+                updateCardSuits();
+                contexts.foreground.clearRect(0, 0, state.canvasWidth, state.canvasHeight);
+                state.cursor.followX = state.cursor.x;
+                state.cursor.followY = state.cursor.y;
+                updateCursorFollower();
+                animate();
+                registerEventListeners();
+                startScramble();
+            }
+
+            initialize();
+        })();
+
+    </script>
+
+</body>
+</html>
